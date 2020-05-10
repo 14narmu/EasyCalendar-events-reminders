@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">EasyCalendar</string>
+    <string-array name="notificationOptions_array">
+        <item>Bildirim Yok</item>
+        <item>10 dk önce</item>
+        <item>20 dk önce</item>
+        <item>30 dk önce</item>
+        <item>1 saat önce</item>
+        <item>2 saat önce</item>
+    </string-array>
+    <string-array name="recurranceOptions_array">
+        <item>Tekrarlama Yok</item>
+        <item>Her Gün</item>
+        <item>Haftada bir kere</item>
+        <item>Ayda bir kere</item>
+        <item>Yılda bir kere</item>
+    </string-array>
+
+    <string-array name="categoryOptions_array">
+        <item>Aktivite</item>
+        <item>Özel Gün</item>
+        <item>Buluşma</item>
+        <item>Toplantı</item>
+        <item>Konser</item>
+        <item>Gösteri</item>
+        <item>Bayram</item>
+    </string-array>
+</resources>
+
