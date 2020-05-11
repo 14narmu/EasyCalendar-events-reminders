@@ -6,25 +6,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-    <LinearLayout
-        android:padding="10dp"
+    <RelativeLayout
+        android:padding="5dp"
         android:background="@color/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
+        android:layout_height="75dp">
         <LinearLayout
-            android:padding="10dp"
-            android:background="#DCDCDC"
+            android:id="@+id/divide_upcomings"
+            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <ImageView
-                android:visibility="invisible"
+            <ImageButton
+                android:id="@+id/btn_upcomingEvents"
+                android:visibility="visible"
                 android:layout_gravity="center"
-                android:background="@drawable/calendar"
+                android:alpha="0.75"
+                android:background="@drawable/outline_event_available_black_18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-            </ImageView>
+            </ImageButton>
             <TextView
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -36,49 +37,75 @@
         </LinearLayout>
 
         <LinearLayout
-            android:padding="10dp"
+            android:layout_toLeftOf="@+id/menu"
+            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
-                android:visibility="invisible"
+                android:layout_marginLeft="115dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:layout_height="match_parent"
+                android:text="11"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="MAY 2020"
                 android:textSize="15sp"
-                android:text="Görünüm">
-            </TextView>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="20dp">
-            </Spinner>
+                android:textStyle="bold"/>
         </LinearLayout>
 
-    </LinearLayout>
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/myCalendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:mcv_showOtherDates="other_months" />
+        <ImageButton
+            android:id="@+id/menu"
+            android:layout_alignParentRight= "true"
+            android:alpha="0.75"
+            android:background="@drawable/baseline_more_vert_black_18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:background="@color/colorPrimary"
-        android:layout_weight="1"
-        android:orientation="vertical"
+        </ImageButton>
+    </RelativeLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            android:id="@+id/addEvent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Etkinlik ekle"/>
-        <ListView
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+
+        <LinearLayout
+            android:background="@color/colorPrimaryDark"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ListView>
-    </LinearLayout>
-
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/myCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mcv_showOtherDates="all"
+                android:background="#FFFFFF"
+                app:mcv_tileWidth="55dp"
+                app:mcv_tileHeight="45dp"
+                <!--mcv_monthLabels-->
+                <!--mcv_weekDayLabels-->
+                app:mcv_selectionColor="@color/colorPrimaryDark"/>
+            <Button
+                android:id="@+id/addEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Etkinlik ekle"/>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ListView>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

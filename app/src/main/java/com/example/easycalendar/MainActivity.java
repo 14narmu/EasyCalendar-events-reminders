@@ -16,6 +16,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialCalendarView myCalendar;
     private Button addEvent;
     private CalendarDay selectedDate;
+    private ImageButton btn_upcomingEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         myCalendar = findViewById(R.id.myCalendar);
         addEvent = findViewById(R.id.addEvent);
+        btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
 
         selectedDate = CalendarDay.today();
         myCalendar.setDateSelected(CalendarDay.today(),true);
@@ -46,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 selectedDate = date;
+            }
+        });
+
+        btn_upcomingEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),UpComingEventsList.class);
+                startActivity(intent);
             }
         });
 
