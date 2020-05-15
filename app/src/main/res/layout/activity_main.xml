@@ -92,8 +92,7 @@
                 android:background="#FFFFFF"
                 app:mcv_tileWidth="55dp"
                 app:mcv_tileHeight="45dp"
-                <!--mcv_monthLabels-->
-                <!--mcv_weekDayLabels-->
+
                 app:mcv_selectionColor="@color/colorPrimaryDark"/>
             <Button
                 android:id="@+id/addEvent"

@@ -40,7 +40,7 @@
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_title_black_18dp"/>
@@ -50,10 +50,11 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
+
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_category_black_18dp"/>
@@ -62,11 +63,11 @@
                 android:layout_marginTop="1dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="125dp"
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_event_black_18dp"/>
@@ -79,7 +80,7 @@
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_notifications_black_18dp"/>
@@ -92,7 +93,7 @@
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_description_black_18dp"/>
@@ -105,7 +106,7 @@
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_sync_black_18dp"/>
@@ -118,7 +119,7 @@
                 android:background="#FFFFFF">
                 <ImageView
                     android:alpha="0.75"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/baseline_account_circle_black_18dp"/>
@@ -206,32 +207,82 @@
         </LinearLayout>
             <LinearLayout
                 android:padding="5dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="125dp"
                 android:background="#FFFFFF">
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="01/01/2020"/>
-                <ImageView
-                    android:layout_marginLeft="40dp"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/baseline_query_builder_black_18dp"/>
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="Başlangıç"/>
+                    <TextView
+                        android:id="@+id/starDate"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="01/01/2020"/>
+                    <ImageView
+                        android:visibility="invisible"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/baseline_query_builder_black_18dp"/>
+                    <TextView
+                        android:id="@+id/startTime"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="14:30"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="14:30"/>
+                    android:padding="5dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="Bitiş"/>
+                    <TextView
+                        android:id="@+id/endDate"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="01/01/2020"/>
+                    <ImageView
+                        android:visibility="invisible"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/baseline_query_builder_black_18dp"/>
+                    <TextView
+                        android:id="@+id/endTime"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="14:30"/>
+                </LinearLayout>
 
             </LinearLayout>
 

@@ -1,31 +1,36 @@
 package com.example.easycalendar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 import com.thebluealliance.spectrum.SpectrumPalette;
-import com.thebluealliance.spectrum.internal.SelectedColorChangedEvent;
+
+
+import java.util.Calendar;
+import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity implements
         View.OnClickListener,AdapterView.OnItemSelectedListener,SpectrumPalette.OnColorSelectedListener{
@@ -42,9 +47,16 @@ public class AddEventActivity extends AppCompatActivity implements
     private CheckBox chckbox_email;
     private CheckBox checkbox_rememberEmail;
 
+    private TextView tv_startTime;
+    private TextView tv_startDate;
+    private TextView tv_endTime;
+    private TextView tv_endDate;
+
+    TimePickerDialog timePickerDialog;
+
     private AlertDialog.Builder builder_palette;
     private  View paletteView;
-
+    private  View datePickerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +77,11 @@ public class AddEventActivity extends AppCompatActivity implements
         spinner_emailNotification.setOnItemSelectedListener(this);
         spinner_recurrance.setOnItemSelectedListener(this);
         spinner_category.setOnItemSelectedListener(this);
+        tv_startTime.setOnClickListener(this);
+        tv_startDate.setOnClickListener(this);
+        tv_endTime.setOnClickListener(this);
+        tv_endDate.setOnClickListener(this);
+
         chckbox_email.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -113,7 +130,22 @@ public class AddEventActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_showPalette:
                 showPaletteLayout();
-
+                break;
+            case R.id.startTime:
+                timePick("start");
+                break;
+            case R.id.endTime:
+                timePick("end");
+                break;
+            case R.id.starDate:
+                mydatepick();
+                break;
+            case R.id.endDate:
+                //TODO
+                /* take a parameter start or end date for mydatepick func
+                   if user selects a date before the start date, unselect the selection
+                 */
+                mydatepick();
                 break;
             default:
                 break;
@@ -139,7 +171,7 @@ public class AddEventActivity extends AppCompatActivity implements
                     }
                     break;
                 case R.id.spinner_recurrance:
-                    if(position !=0 )
+                    if(position != 0 )
                         btn_setRecurranceToNone.setVisibility(View.VISIBLE);
                     else
                         btn_setRecurranceToNone.setVisibility(View.INVISIBLE);
@@ -174,8 +206,10 @@ public class AddEventActivity extends AppCompatActivity implements
         chckbox_email =findViewById(R.id.checkbo_email);
         checkbox_rememberEmail =findViewById(R.id.checkbox_rememberEmail);
         edtTxt_email = findViewById(R.id.edtTxt_email);
-
-
+        tv_startTime = findViewById(R.id.startTime);
+        tv_startDate = findViewById(R.id.starDate);
+        tv_endTime = findViewById(R.id.endTime);
+        tv_endDate = findViewById(R.id.endDate);
 
         ArrayAdapter<CharSequence> adptr_notification = ArrayAdapter.createFromResource(this,
                 R.array.notificationOptions_array, android.R.layout.simple_spinner_item);
@@ -198,7 +232,75 @@ public class AddEventActivity extends AppCompatActivity implements
         spinner_notification.setSelection(1);
         spinner_recurrance.setSelection(0);
         spinner_category.setSelection(0);
+
+
+
+
     }
+
+    public void timePick(String time_type){
+
+        final Calendar takvim = Calendar.getInstance();
+        int saat = takvim.get(Calendar.HOUR_OF_DAY);
+        int dakika = takvim.get(Calendar.MINUTE);
+
+        TimePickerDialog tpd = new TimePickerDialog(AddEventActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        // hourOfDay ve minute değerleri seçilen saat değerleridir.
+                        Time selectedTime = new Time(hourOfDay,minute);
+                        if(time_type.equals("start")) {  //StartTimePicker selected
+                            tv_startTime.setText(selectedTime.toString());
+                            tv_endTime.setText(selectedTime.toString());
+                        }else { //EndTimePicker selected
+                            Time startTime = new Time(tv_startTime.getText().toString(),':');
+                            Boolean oneDayEvent = tv_startDate.getText().toString().equals(tv_endDate.getText().toString());
+                            if( oneDayEvent && selectedTime.isBefore(startTime) )
+                                Toast.makeText(AddEventActivity.this, "Hatalı bitiş zamanı", Toast.LENGTH_SHORT).show();
+                            else
+                                tv_endTime.setText(hourOfDay + ":" + minute);
+                        }
+
+                    }
+                }, saat, dakika, true);
+
+        tpd.setButton(TimePickerDialog.BUTTON_POSITIVE, "Tamam", tpd);
+        tpd.show();
+    }
+
+    public void mydatepick(){
+        AlertDialog.Builder builder_date;
+        LayoutInflater inflater = AddEventActivity.this.getLayoutInflater();
+        datePickerView = inflater.inflate(R.layout.datepick_layout,null);
+
+        builder_date = new AlertDialog.Builder(AddEventActivity.this);
+        builder_date.setTitle(" Etkinlik Tarihi");
+        builder_date.setMessage("Başlangıç ve bitiş tarihi");
+        builder_date.setView(datePickerView);
+        builder_date.setPositiveButton("Tamam", null);
+        builder_date.show();
+        MaterialCalendarView calendarView = datePickerView.findViewById(R.id.calendarView);
+
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                tv_startDate.setText(date.getDay() + "/" + date.getMonth()+ "/"+ date.getYear());
+                tv_endDate .setText(date.getDay() + "/" + date.getMonth()+ "/"+ date.getYear());
+            }
+        });
+
+        calendarView.setOnRangeSelectedListener(new OnRangeSelectedListener() {
+            @Override
+            public void onRangeSelected(@NonNull MaterialCalendarView widget, @NonNull List<CalendarDay> dates) {
+                CalendarDay startDay = dates.get(0);
+                tv_startDate.setText(startDay.getDay() + "/" + startDay.getMonth()+ "/"+ startDay.getYear());
+                 startDay = dates.get(dates.size() - 1);
+                tv_endDate.setText(startDay.getDay() + "/" + startDay.getMonth()+ "/"+ startDay.getYear());
+            }
+        });
+    }
+
 
 
     @Override

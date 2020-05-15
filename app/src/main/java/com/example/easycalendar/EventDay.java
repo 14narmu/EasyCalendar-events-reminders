@@ -1,8 +1,11 @@
 package com.example.easycalendar;
 
-public class MyEvent {
+public class EventDay {
     private String eventName;
-    public MyEvent(String eventName){
+    private Integer color;
+    //start time
+    //
+    public EventDay(String eventName){
         this.eventName  = eventName;
     }
 

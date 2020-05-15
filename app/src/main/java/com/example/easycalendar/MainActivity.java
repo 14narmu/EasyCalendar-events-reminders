@@ -23,7 +23,9 @@ import android.widget.Toast;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,7 +61,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+       CalendarDay mydate=CalendarDay.from(2020,  5, 21); // year, month, date
+        HashSet<CalendarDay> dates = new HashSet<>();
+        dates.add(mydate);
+        myCalendar.addDecorators(new EventDecorator(0, dates,getApplicationContext()));
 
+        CalendarDay mydate2=CalendarDay.from(2020,  5, 20); // year, month, date
+        dates.add(mydate2);
+        myCalendar.addDecorators(new EventDecorator(getColor(R.color.colorAccent), dates,getApplicationContext()));
 /*
         myCalendar.setOnDayClickListener(new OnDayClickListener() {
             @Override

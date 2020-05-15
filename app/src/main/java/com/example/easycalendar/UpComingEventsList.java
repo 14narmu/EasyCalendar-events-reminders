@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class UpComingEventsList extends AppCompatActivity {
 private RecyclerView recyclerView_UpcomingEvents;
     LinearLayoutManager layoutManager;
-    ArrayList<MyEvent> events;
+    ArrayList<EventDay> events;
     EventAdapter eventAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,21 +23,21 @@ private RecyclerView recyclerView_UpcomingEvents;
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView_UpcomingEvents.setLayoutManager(layoutManager);
         events = new ArrayList<>();
-        events.add(new MyEvent("Deneme1"));
-        events.add(new MyEvent("Deneme2"));
-        events.add(new MyEvent("Deneme3"));
-        events.add(new MyEvent("Deneme4"));
-        events.add(new MyEvent("Deneme5"));
-        events.add(new MyEvent("Deneme1"));
-        events.add(new MyEvent("Deneme2"));
-        events.add(new MyEvent("Deneme3"));
-        events.add(new MyEvent("Deneme4"));
-        events.add(new MyEvent("Deneme5"));
-        events.add(new MyEvent("Deneme1"));
-        events.add(new MyEvent("Deneme2"));
-        events.add(new MyEvent("Deneme3"));
-        events.add(new MyEvent("Deneme4"));
-        events.add(new MyEvent("Deneme5"));
+        events.add(new EventDay("Deneme1"));
+        events.add(new EventDay("Deneme2"));
+        events.add(new EventDay("Deneme3"));
+        events.add(new EventDay("Deneme4"));
+        events.add(new EventDay("Deneme5"));
+        events.add(new EventDay("Deneme1"));
+        events.add(new EventDay("Deneme2"));
+        events.add(new EventDay("Deneme3"));
+        events.add(new EventDay("Deneme4"));
+        events.add(new EventDay("Deneme5"));
+        events.add(new EventDay("Deneme1"));
+        events.add(new EventDay("Deneme2"));
+        events.add(new EventDay("Deneme3"));
+        events.add(new EventDay("Deneme4"));
+        events.add(new EventDay("Deneme5"));
         eventAdapter = new EventAdapter(this,events);
         recyclerView_UpcomingEvents.setAdapter(eventAdapter);
     }
