@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -29,11 +30,14 @@ import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 import com.thebluealliance.spectrum.SpectrumPalette;
 
 
+import org.threeten.bp.LocalDate;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity implements
-        View.OnClickListener,AdapterView.OnItemSelectedListener,SpectrumPalette.OnColorSelectedListener{
+        View.OnClickListener,AdapterView.OnItemSelectedListener{
     private String selectedDate;
     private Spinner spinner_notification;
     private Spinner spinner_recurrance;
@@ -42,8 +46,12 @@ public class AddEventActivity extends AppCompatActivity implements
     private ImageButton btn_setNotificationToNone;
     private ImageButton  btn_setRecurranceToNone;
     private ImageButton  btn_showPalette;
+    private Button btn_addEvent;
+    private Button btn_back;
     private TextView notiftv;
     private EditText edtTxt_email;
+    private EditText edtTxt_notes;
+    private EditText edtTxt_eventName;
     private CheckBox chckbox_email;
     private CheckBox checkbox_rememberEmail;
 
@@ -57,6 +65,8 @@ public class AddEventActivity extends AppCompatActivity implements
     private AlertDialog.Builder builder_palette;
     private  View paletteView;
     private  View datePickerView;
+
+    private int eventColor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +83,8 @@ public class AddEventActivity extends AppCompatActivity implements
         btn_setNotificationToNone.setOnClickListener(this);
         btn_setRecurranceToNone.setOnClickListener(this);
         btn_showPalette.setOnClickListener(this);
+        btn_addEvent.setOnClickListener(this);
+        btn_back.setOnClickListener(this);
         spinner_notification.setOnItemSelectedListener(this);
         spinner_emailNotification.setOnItemSelectedListener(this);
         spinner_recurrance.setOnItemSelectedListener(this);
@@ -116,7 +128,15 @@ public class AddEventActivity extends AppCompatActivity implements
         builder_palette.setPositiveButton("Tamam", null);
         builder_palette.show();
         SpectrumPalette spectrumPalette = paletteView.findViewById(R.id.palette);
-        spectrumPalette.setOnColorSelectedListener(this);
+        spectrumPalette.setOnColorSelectedListener(new SpectrumPalette.OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int color) {
+                Toast.makeText(AddEventActivity.this, "CoLOR : " + color, Toast.LENGTH_SHORT).show();
+                btn_showPalette.setBackgroundColor(color);
+                eventColor = color;
+            }
+        });
+
     }
 
     @Override
@@ -146,6 +166,12 @@ public class AddEventActivity extends AppCompatActivity implements
                    if user selects a date before the start date, unselect the selection
                  */
                 mydatepick();
+                break;
+            case R.id.btn_completeAddingEvent:
+                addEvent();
+                break;
+            case R.id.AddEventActivity_btn_back:
+                finish();
                 break;
             default:
                 break;
@@ -203,9 +229,13 @@ public class AddEventActivity extends AppCompatActivity implements
         btn_setNotificationToNone = findViewById(R.id.btn_setNotificationToNone);
         btn_setRecurranceToNone = findViewById(R.id.btn_setRecurranceToNone);
         btn_showPalette = findViewById(R.id.btn_showPalette);
+        btn_addEvent = findViewById(R.id.btn_completeAddingEvent);
+        btn_back = findViewById(R.id.AddEventActivity_btn_back);
         chckbox_email =findViewById(R.id.checkbo_email);
         checkbox_rememberEmail =findViewById(R.id.checkbox_rememberEmail);
         edtTxt_email = findViewById(R.id.edtTxt_email);
+        edtTxt_notes = findViewById(R.id.edtTxt_notes);
+        edtTxt_eventName = findViewById(R.id.edtTxt_eventName);
         tv_startTime = findViewById(R.id.startTime);
         tv_startDate = findViewById(R.id.starDate);
         tv_endTime = findViewById(R.id.endTime);
@@ -303,9 +333,24 @@ public class AddEventActivity extends AppCompatActivity implements
 
 
 
-    @Override
-    public void onColorSelected(int color) {
-        Toast.makeText(AddEventActivity.this, "CoLOR : " + color, Toast.LENGTH_SHORT).show();
-        btn_showPalette.setBackgroundColor(color);
+
+
+    public void addEvent(){
+
+        String eventName = edtTxt_eventName.getText().toString();
+        int eventCategory  = spinner_category.getSelectedItemPosition();
+        //eventColor already setted
+
+        LocalDate startDate = MyEvent.StringToDate( tv_startDate.getText().toString(), '/' );
+        LocalDate endDate = MyEvent.StringToDate( tv_endDate.getText().toString(), '/' );
+        Time startTime = new Time(tv_startTime.getText().toString(),':');
+        Time endTime = new Time(tv_endTime.getText().toString(),':');
+
+        int notification = spinner_notification.getSelectedItemPosition();
+        String notes = edtTxt_notes.getText().toString();
+        int reccurance = spinner_recurrance.getSelectedItemPosition();
+
+        MyEvent myEvent = new MyEvent(eventName, eventCategory,eventColor,startTime,endTime,startDate,endDate,notification,notes,reccurance);
+        Toast.makeText(this, "Etkinlik kaydedildi", Toast.LENGTH_SHORT).show();
     }
 }

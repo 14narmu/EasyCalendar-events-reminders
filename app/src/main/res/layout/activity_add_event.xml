@@ -160,6 +160,7 @@
                 android:background="#FFFFFF">
 
                 <EditText
+                    android:id="@+id/edtTxt_eventName"
                     android:padding="5dp"
                     android:focusedByDefault="false"
                     android:layout_width="match_parent"
@@ -380,6 +381,7 @@
                 android:layout_height="75dp"
                 android:background="#FFFFFF">
                 <EditText
+                    android:id="@+id/edtTxt_notes"
                     android:padding="5dp"
                     android:background="#FFFFFF"
                     android:layout_width="match_parent"
@@ -446,6 +448,7 @@
         android:orientation="horizontal"
         android:background="@color/colorAccent">
         <Button
+            android:id="@+id/AddEventActivity_btn_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/md_blue_grey_300"
@@ -454,6 +457,7 @@
 
         </Button>
         <Button
+            android:id="@+id/btn_completeAddingEvent"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/md_blue_grey_300"
