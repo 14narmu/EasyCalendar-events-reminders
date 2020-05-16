@@ -1,11 +1,15 @@
 package com.example.easycalendar;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.service.autofill.TextValueSanitizer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -33,6 +37,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.eventName.setText(events.get(position).getEventName());
+
+        TypedArray categories = context.getResources().obtainTypedArray(R.array.categoryOptions_array);
+        String category  = categories.getString(events.get(position).getIndex_category());
+        holder.eventCategory.setText(category);
+
+        String date = events.get(position).getStartDate().toString();
+        holder.startDate.setText(date);
+
+        holder.startTime.setText(events.get(position).getStartTime().toString());
+        holder.eventColor.setBackgroundColor(events.get(position).getColor());
+
     }
 
 
@@ -42,10 +57,24 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView eventCategory;
         TextView eventName;
+        TextView startDate;
+        TextView weekDay;
+        TextView startTime;
+        ImageView eventColor;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = itemView.findViewById(R.id.event_card_eventName);
+            eventCategory = itemView.findViewById( R.id.event_card_eventCategory );
+            startDate = itemView.findViewById( R.id.event_card_startDate );
+            weekDay = itemView.findViewById( R.id.event_card_weekDay );
+            startTime = itemView.findViewById( R.id.event_card_startTime );
+            eventColor = itemView.findViewById(R.id.event_card_eventColor);
         }
     }
+
+
 }
