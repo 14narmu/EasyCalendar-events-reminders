@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.threeten.bp.LocalDate;
@@ -21,16 +23,17 @@ import java.util.Comparator;
 
 public class UpComingEventsList extends AppCompatActivity implements View.OnClickListener{
 private RecyclerView recyclerView_UpcomingEvents;
-    LinearLayoutManager layoutManager;
-    ArrayList<MyEvent> events;
-    EventAdapter eventAdapter;
+    private LinearLayoutManager layoutManager;
+    private ArrayList<MyEvent> events;
+    private EventAdapter eventAdapter;
+    private ImageButton btn_mainMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_up_coming_events_list);
 
         recyclerView_UpcomingEvents = findViewById(R.id.recyclerView_UpcomingEvents);
-
+        btn_mainMenu = findViewById(R.id.btn_MainMenu);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView_UpcomingEvents.setLayoutManager(layoutManager);
 
@@ -47,6 +50,7 @@ private RecyclerView recyclerView_UpcomingEvents;
         setRecyclerView_UpcomingEvents();
 
         setRecyclerView_UpcomingEventsListener();
+        btn_mainMenu.setOnClickListener(this);
 
 
     }
@@ -101,5 +105,17 @@ private RecyclerView recyclerView_UpcomingEvents;
         events.remove(position);
         Toast.makeText(this, "Etkinlik Silindi", Toast.LENGTH_SHORT).show();
         setRecyclerView_UpcomingEvents();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_MainMenu:
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }
