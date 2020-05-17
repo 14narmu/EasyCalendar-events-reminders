@@ -17,6 +17,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -33,24 +36,24 @@ public class MainActivity extends AppCompatActivity {
     private Button addEvent;
     private CalendarDay selectedDate;
     private ImageButton btn_upcomingEvents;
+    private ListView dailyEventList;
 
+    private ArrayList<MyEvent> events;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myCalendar = findViewById(R.id.myCalendar);
-        addEvent = findViewById(R.id.addEvent);
-        btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
+        initViews();
 
-        selectedDate = CalendarDay.today();
-        myCalendar.setDateSelected(CalendarDay.today(),true);
+
 
 
         myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 selectedDate = date;
+                showDailyEvents();
             }
         });
 
@@ -61,27 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-       CalendarDay mydate=CalendarDay.from(2020,  5, 21); // year, month, date
-        HashSet<CalendarDay> dates = new HashSet<>();
-        dates.add(mydate);
-        myCalendar.addDecorators(new EventDecorator(0, dates,getApplicationContext()));
-
-        CalendarDay mydate2=CalendarDay.from(2020,  5, 20); // year, month, date
-        dates.add(mydate2);
-        myCalendar.addDecorators(new EventDecorator(getColor(R.color.colorAccent), dates,getApplicationContext()));
-/*
-        myCalendar.setOnDayClickListener(new OnDayClickListener() {
-            @Override
-            public void onDayClick(EventDay eventDay) {
-                selectedDate = eventDay.getCalendar();
-                calendars.add(selectedDate);
-                myCalendar.setHighlightedDays(calendars);
-                //previewNote(eventDay);
-
-
-
-            }
-        });*/
+        calendarDecorate();
 
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,5 +77,47 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
+    }
+
+    private void calendarDecorate() {
+        HashSet<CalendarDay> eventDays = new HashSet<>();
+       for (MyEvent aEvent : events){
+           eventDays.add(CalendarDay.from(aEvent.getStartDate()));
+       }
+
+        myCalendar.addDecorators(new EventDecorator(getColor(R.color.colorAccent), eventDays,getApplicationContext()));
+    }
+
+    private void initViews() {
+        events = new ArrayList<>();
+        UpComingEventsList.fillEvents(events);
+
+        myCalendar = findViewById(R.id.myCalendar);
+        addEvent = findViewById(R.id.addEvent);
+        btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
+        dailyEventList = findViewById(R.id.dailyEventList);
+
+        selectedDate = CalendarDay.today();
+        myCalendar.setDateSelected(CalendarDay.today(),true);
+        decorateToday();
+    }
+    private void decorateToday(){
+        HashSet<CalendarDay> eventDays = new HashSet<>();
+        eventDays.add(CalendarDay.today());
+        myCalendar.addDecorators(new EventDecorator(1, eventDays,getApplicationContext()));
+    }
+    private void showDailyEvents(){
+
+        ArrayList<MyEvent> dayEvents = new ArrayList<>();
+        for(MyEvent aEvent : events){
+            if ( aEvent.getStartDate().equals(selectedDate.getDate()) )
+                dayEvents.add(aEvent);
+        }
+
+
+        DailyEventAdapter adapter_daily =  new DailyEventAdapter(getApplicationContext(),dayEvents);
+        dailyEventList.setAdapter(adapter_daily);
     }
 }

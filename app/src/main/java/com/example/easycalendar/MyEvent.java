@@ -23,7 +23,9 @@ public class MyEvent {
     private String notes;
     private int index_recurrance;
     private Location eventLocation;
-
+    public MyEvent(LocalDate startDate){
+        this.startDate = startDate;
+    }
     public MyEvent(String eventName, int index_category, int color, Time startTime, Time endTime,
                    LocalDate startDate, LocalDate endDate, int index_notification, String notes, int index_recurrance) {
         this.eventName = eventName;

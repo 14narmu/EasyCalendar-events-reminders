@@ -38,7 +38,7 @@ private RecyclerView recyclerView_UpcomingEvents;
         recyclerView_UpcomingEvents.setLayoutManager(layoutManager);
 
         events = new ArrayList<>();
-        fillRecyclerView(); //dynamically fills view for debugging
+        fillEvents(events); //dynamically fills view for debugging
 
         Collections.sort(events, new Comparator<MyEvent>() {
             @Override
@@ -55,7 +55,7 @@ private RecyclerView recyclerView_UpcomingEvents;
 
     }
 
-    private void fillRecyclerView() {
+    public static void fillEvents (ArrayList<MyEvent> events){
         //debugging purpose
         Time t = new Time(12,50);
         events.add(new MyEvent(t,1,"Deneme1",  LocalDate.of(2020,10,10)));

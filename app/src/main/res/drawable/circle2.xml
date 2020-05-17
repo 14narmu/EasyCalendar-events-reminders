@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <size
+                android:width="120dp" android:height="120dp"/>
+            <solid android:color="#ffff0000"/>
+            <stroke
+                android:width="3dp" android:color="#ff00ff00"/>
+        </shape>
+    </item>
+    <item
+        android:width="60dp" android:height="60dp" android:drawable="@android:drawable/btn_star"
+        android:gravity="center"/>
+</layer-list>
