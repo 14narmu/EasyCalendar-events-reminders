@@ -3,12 +3,15 @@ package com.example.easycalendar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 import android.content.Intent;
 import android.os.Bundle;
 
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private CalendarDay selectedDate;
     private ImageButton btn_upcomingEvents;
     private ListView dailyEventList;
+    private Realm realm;
 
-    private ArrayList<MyEvent> events;
+    private ArrayList<MyEvent> allEvents;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 selectedDate = date;
-                showDailyEvents();
+                listDailyEvents();
             }
         });
 
@@ -64,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        calendarDecorate();
+
 
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),AddEventActivity.class);
-                String date = selectedDate.getDay()+"/"+selectedDate.getMonth()+"/"+selectedDate.getYear();
+                String date = selectedDate.getDate().toString();
                 intent.putExtra("date",date);
                 startActivity(intent);
             }
@@ -83,39 +87,56 @@ public class MainActivity extends AppCompatActivity {
 
     private void calendarDecorate() {
         HashSet<CalendarDay> eventDays = new HashSet<>();
-       for (MyEvent aEvent : events){
-           eventDays.add(CalendarDay.from(aEvent.getStartDate()));
+       for (MyEvent aEvent : allEvents){
+           String [] tokens = aEvent.getStartDate().split("-");
+           int year = Integer.valueOf(tokens[0]);
+           int month = Integer.valueOf(tokens[1]);
+           int day = Integer.valueOf(tokens[2]);
+           eventDays.add(CalendarDay.from(year,month,day));
        }
 
         myCalendar.addDecorators(new EventDecorator(getColor(R.color.colorAccent), eventDays,getApplicationContext()));
     }
 
     private void initViews() {
-        events = new ArrayList<>();
-        UpComingEventsList.fillEvents(events);
+        allEvents = new ArrayList<>();
+        
 
         myCalendar = findViewById(R.id.myCalendar);
         addEvent = findViewById(R.id.addEvent);
         btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
         dailyEventList = findViewById(R.id.dailyEventList);
-
         selectedDate = CalendarDay.today();
         myCalendar.setDateSelected(CalendarDay.today(),true);
+        realm = Realm.getDefaultInstance();
+        getEventsFromDb();
         decorateToday();
+        calendarDecorate();
     }
+
+    private void getEventsFromDb() {
+
+        RealmResults<MyEvent> eventsDb = realm.where(MyEvent.class).findAll();
+        for(MyEvent aEvent : eventsDb){
+            allEvents.add(aEvent);
+        }
+    }
+
     private void decorateToday(){
         HashSet<CalendarDay> eventDays = new HashSet<>();
         eventDays.add(CalendarDay.today());
         myCalendar.addDecorators(new EventDecorator(1, eventDays,getApplicationContext()));
     }
-    private void showDailyEvents(){
+    private void listDailyEvents(){
 
         ArrayList<MyEvent> dayEvents = new ArrayList<>();
-        for(MyEvent aEvent : events){
-            if ( aEvent.getStartDate().equals(selectedDate.getDate()) )
-                dayEvents.add(aEvent);
-        }
 
+        for(MyEvent aEvent : allEvents){
+
+            if ( aEvent.getStartDate().equals(selectedDate.getDate().toString()) )
+                dayEvents.add(aEvent);
+
+        }
 
         DailyEventAdapter adapter_daily =  new DailyEventAdapter(getApplicationContext(),dayEvents);
         dailyEventList.setAdapter(adapter_daily);

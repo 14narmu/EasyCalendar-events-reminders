@@ -1,9 +1,13 @@
 package com.example.easycalendar;
 
-public class Time {
+import io.realm.RealmObject;
+
+public class Time extends RealmObject {
     private Integer hour;
     private Integer minute;
-    private char sep = ':';
+    private String sep = ":";
+
+    public Time(){}
 
     public Time(int hour, int minute) {
         this.hour = hour;
@@ -11,19 +15,19 @@ public class Time {
     }
 
 
-    public Time(int hour, int minute, char sep) {
+    public Time(int hour, int minute, String  sep) {
         this.hour = hour;
         this.minute = minute;
         this.sep = sep;
     }
 
-    public Time(String hourAndMinute, char sep){
+    public Time(String hourAndMinute, String sep){
         String[] tokens = hourAndMinute.split(String.valueOf(sep));
        // if(tokens.length != 2)
             //throw Exception("Argument not proper for Time class");
         this.hour = Integer.valueOf(tokens[0]);
         this.minute = Integer.valueOf(tokens[1]);
-        this.sep = Character.valueOf(sep);
+        this.sep = sep;
     }
 
     public int getHour() {
@@ -42,11 +46,11 @@ public class Time {
         this.minute = minute;
     }
 
-    public char getSep() {
+    public String getSep() {
         return sep;
     }
 
-    public void setSep(char sep) {
+    public void setSep(String sep) {
         this.sep = sep;
     }
 

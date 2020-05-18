@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,9 +26,10 @@ import java.util.Comparator;
 public class UpComingEventsList extends AppCompatActivity implements View.OnClickListener{
 private RecyclerView recyclerView_UpcomingEvents;
     private LinearLayoutManager layoutManager;
-    private ArrayList<MyEvent> events;
+    private ArrayList<MyEvent> allEvents;
     private EventAdapter eventAdapter;
     private ImageButton btn_mainMenu;
+    private Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +39,13 @@ private RecyclerView recyclerView_UpcomingEvents;
         btn_mainMenu = findViewById(R.id.btn_MainMenu);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView_UpcomingEvents.setLayoutManager(layoutManager);
+        realm = Realm.getDefaultInstance();
 
-        events = new ArrayList<>();
-        fillEvents(events); //dynamically fills view for debugging
+        allEvents = new ArrayList<>();
+        //fillEvents(events); //dynamically fills view for debugging
+        getEventsFromDb();
 
-        Collections.sort(events, new Comparator<MyEvent>() {
+        Collections.sort(allEvents, new Comparator<MyEvent>() {
             @Override
             public int compare(MyEvent o1, MyEvent o2) {
                 return o1.getStartDate().compareTo(o2.getStartDate());
@@ -55,17 +60,6 @@ private RecyclerView recyclerView_UpcomingEvents;
 
     }
 
-    public static void fillEvents (ArrayList<MyEvent> events){
-        //debugging purpose
-        Time t = new Time(12,50);
-        events.add(new MyEvent(t,1,"Deneme1",  LocalDate.of(2020,10,10)));
-        events.add(new MyEvent(t,2,"Deneme2", LocalDate.of(2020,10,10)));
-        events.add(new MyEvent(t,3,"Deneme3",LocalDate.of(2020,5,4)));
-        events.add(new MyEvent(t,4,"Deneme4", LocalDate.of(2020,5,5)));
-        events.add(new MyEvent(t,2,"Deneme5", LocalDate.of(2020,6,15)));
-        events.add(new MyEvent(t,2,"Deneme6", LocalDate.of(2020,1,30)));
-        events.add(new MyEvent(t,1,"Deneme7", LocalDate.of(2020,5,3)));
-    }
 
     private void setRecyclerView_UpcomingEventsListener() {
         recyclerView_UpcomingEvents.addOnItemTouchListener(
@@ -97,12 +91,18 @@ private RecyclerView recyclerView_UpcomingEvents;
     }
 
     private void setRecyclerView_UpcomingEvents(){
-        eventAdapter = new EventAdapter(this,events);
+        eventAdapter = new EventAdapter(this,allEvents);
         recyclerView_UpcomingEvents.setAdapter(eventAdapter);
     }
 
     private void deleteEvent(int position) {
-        events.remove(position);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                allEvents.get(position).deleteFromRealm();
+            }
+        });
+        allEvents.remove(position);
         Toast.makeText(this, "Etkinlik Silindi", Toast.LENGTH_SHORT).show();
         setRecyclerView_UpcomingEvents();
     }
@@ -116,6 +116,14 @@ private RecyclerView recyclerView_UpcomingEvents;
                 break;
             default:
                 break;
+        }
+    }
+    private void getEventsFromDb() {
+
+        RealmResults<MyEvent> eventsDb = realm.where(MyEvent.class).findAll();
+        for(MyEvent aEvent : eventsDb){
+            allEvents.add(aEvent);
+            //Log.i("Realm kaydı : ","etkinlik adı" + aEvent.getEventName()+" tarihi" + aEvent.getStartDate());
         }
     }
 }

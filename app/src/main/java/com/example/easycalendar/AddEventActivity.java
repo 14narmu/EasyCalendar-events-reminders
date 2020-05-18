@@ -3,11 +3,14 @@ package com.example.easycalendar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -66,7 +69,9 @@ public class AddEventActivity extends AppCompatActivity implements
     private  View paletteView;
     private  View datePickerView;
 
-    private int eventColor;
+    private Realm realm;
+
+    private int eventColor = -16537100; //default color
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +82,6 @@ public class AddEventActivity extends AppCompatActivity implements
         Toast.makeText(this, "Tarih : "+selectedDate, Toast.LENGTH_SHORT).show();
 
         initViews();
-
 
 
         btn_setNotificationToNone.setOnClickListener(this);
@@ -240,6 +244,7 @@ public class AddEventActivity extends AppCompatActivity implements
         tv_startDate = findViewById(R.id.starDate);
         tv_endTime = findViewById(R.id.endTime);
         tv_endDate = findViewById(R.id.endDate);
+        realm = Realm.getDefaultInstance();
 
         ArrayAdapter<CharSequence> adptr_notification = ArrayAdapter.createFromResource(this,
                 R.array.notificationOptions_array, android.R.layout.simple_spinner_item);
@@ -263,6 +268,9 @@ public class AddEventActivity extends AppCompatActivity implements
         spinner_recurrance.setSelection(0);
         spinner_category.setSelection(0);
 
+        tv_startDate.setText( selectedDate);
+        tv_endDate .setText( selectedDate);
+
 
 
 
@@ -284,7 +292,7 @@ public class AddEventActivity extends AppCompatActivity implements
                             tv_startTime.setText(selectedTime.toString());
                             tv_endTime.setText(selectedTime.toString());
                         }else { //EndTimePicker selected
-                            Time startTime = new Time(tv_startTime.getText().toString(),':');
+                            Time startTime = new Time(tv_startTime.getText().toString(),":");
                             Boolean oneDayEvent = tv_startDate.getText().toString().equals(tv_endDate.getText().toString());
                             if( oneDayEvent && selectedTime.isBefore(startTime) )
                                 Toast.makeText(AddEventActivity.this, "Hatalı bitiş zamanı", Toast.LENGTH_SHORT).show();
@@ -315,8 +323,8 @@ public class AddEventActivity extends AppCompatActivity implements
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                tv_startDate.setText(date.getDay() + "/" + date.getMonth()+ "/"+ date.getYear());
-                tv_endDate .setText(date.getDay() + "/" + date.getMonth()+ "/"+ date.getYear());
+                tv_startDate.setText(date.getDate().toString());
+                tv_endDate .setText( date.getDate().toString());
             }
         });
 
@@ -324,9 +332,9 @@ public class AddEventActivity extends AppCompatActivity implements
             @Override
             public void onRangeSelected(@NonNull MaterialCalendarView widget, @NonNull List<CalendarDay> dates) {
                 CalendarDay startDay = dates.get(0);
-                tv_startDate.setText(startDay.getDay() + "/" + startDay.getMonth()+ "/"+ startDay.getYear());
+                tv_startDate.setText( startDay.getDate().toString());
                  startDay = dates.get(dates.size() - 1);
-                tv_endDate.setText(startDay.getDay() + "/" + startDay.getMonth()+ "/"+ startDay.getYear());
+                tv_endDate.setText( startDay.getDate().toString());
             }
         });
     }
@@ -341,16 +349,43 @@ public class AddEventActivity extends AppCompatActivity implements
         int eventCategory  = spinner_category.getSelectedItemPosition();
         //eventColor already setted
 
-        LocalDate startDate = MyEvent.StringToDate( tv_startDate.getText().toString(), '/' );
-        LocalDate endDate = MyEvent.StringToDate( tv_endDate.getText().toString(), '/' );
-        Time startTime = new Time(tv_startTime.getText().toString(),':');
-        Time endTime = new Time(tv_endTime.getText().toString(),':');
+       // LocalDate startDate = MyEvent.StringToDate( tv_startDate.getText().toString(), '' );
+        //LocalDate endDate = MyEvent.StringToDate( tv_endDate.getText().toString(), '/' );
+        String startDate =tv_startDate.getText().toString();
+        String endDate = tv_endDate.getText().toString();
+        Time startTime = new Time(tv_startTime.getText().toString(),":");
+        Time endTime = new Time(tv_endTime.getText().toString(),":");
 
         int notification = spinner_notification.getSelectedItemPosition();
         String notes = edtTxt_notes.getText().toString();
         int reccurance = spinner_recurrance.getSelectedItemPosition();
 
         MyEvent myEvent = new MyEvent(eventName, eventCategory,eventColor,startTime,endTime,startDate,endDate,notification,notes,reccurance);
-        Toast.makeText(this, "Etkinlik kaydedildi", Toast.LENGTH_SHORT).show();
+        saveToDb(myEvent);
+
+        //close the activity and return the menu
+        Intent intent = new Intent(AddEventActivity.this,MainActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+
+    public void saveToDb(MyEvent myEvent){
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                MyEvent event = realm.copyToRealm(myEvent);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(AddEventActivity.this, "Etkinlik kaydedildi", Toast.LENGTH_SHORT).show();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(AddEventActivity.this, "Bir hata meydana geldi", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

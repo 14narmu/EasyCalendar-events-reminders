@@ -6,28 +6,32 @@ import android.location.Location;
 
 import org.threeten.bp.LocalDate;
 
+import io.realm.RealmObject;
 
 
-public class MyEvent {
+public class MyEvent extends RealmObject {
     private String eventName;
     private int index_category;
     private int color =-6543440;
     private Time startTime;
     private Time endTime;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
     private int index_notification;
     private int email_notification;
     private String email;
     private boolean rememberEmail;
     private String notes;
     private int index_recurrance;
-    private Location eventLocation;
-    public MyEvent(LocalDate startDate){
+    private String eventLocation;
+
+    public MyEvent(){
+    }
+    public MyEvent(String startDate){
         this.startDate = startDate;
     }
     public MyEvent(String eventName, int index_category, int color, Time startTime, Time endTime,
-                   LocalDate startDate, LocalDate endDate, int index_notification, String notes, int index_recurrance) {
+                   String startDate, String endDate, int index_notification, String notes, int index_recurrance) {
         this.eventName = eventName;
         this.index_category = index_category;
         this.color = color;
@@ -47,7 +51,7 @@ public class MyEvent {
         return date;
     }
     //TODO Delete after debug
-    public MyEvent(Time time,int index_category,String eventName, LocalDate startDate) {
+    public MyEvent(Time time,int index_category,String eventName, String startDate) {
         this.index_category = index_category;
         this.eventName = eventName;
         this.startDate = startDate;
@@ -94,19 +98,19 @@ public class MyEvent {
         this.endTime = endTime;
     }
 
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -158,11 +162,11 @@ public class MyEvent {
         this.index_recurrance = index_recurrance;
     }
 
-    public Location getEventLocation() {
+    public String getEventLocation() {
         return eventLocation;
     }
 
-    public void setEventLocation(Location eventLocation) {
+    public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
     }
 
