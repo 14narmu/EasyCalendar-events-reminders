@@ -75,8 +75,6 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-
-
         <LinearLayout
             android:background="@color/colorPrimaryDark"
             android:layout_weight="1"
@@ -88,7 +86,7 @@
                 android:id="@+id/myCalendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:mcv_showOtherDates="all"
+                app:mcv_showOtherDates="none"
                 android:background="#FFFFFF"
                 app:mcv_tileWidth="55dp"
                 app:mcv_tileHeight="45dp"
