@@ -50,7 +50,7 @@ public class MyEvent extends RealmObject {
         LocalDate date = LocalDate.of( Integer.valueOf(tokens[2]), Integer.valueOf(tokens[1]),Integer.valueOf(tokens[0]) );
         return date;
     }
-    //TODO Delete after debug
+
     public MyEvent(Time time,int index_category,String eventName, String startDate) {
         this.index_category = index_category;
         this.eventName = eventName;
