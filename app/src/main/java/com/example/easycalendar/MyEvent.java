@@ -6,10 +6,18 @@ import android.location.Location;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.UUID;
+
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 
 public class MyEvent extends RealmObject {
+
+    @Required
+    @PrimaryKey
+    private String pKey = UUID.randomUUID().toString();
     private String eventName;
     private int index_category;
     private int color =-6543440;
@@ -27,9 +35,7 @@ public class MyEvent extends RealmObject {
 
     public MyEvent(){
     }
-    public MyEvent(String startDate){
-        this.startDate = startDate;
-    }
+
     public MyEvent(String eventName, int index_category, int color, Time startTime, Time endTime,
                    String startDate, String endDate, int index_notification, String notes, int index_recurrance) {
         this.eventName = eventName;
@@ -171,5 +177,10 @@ public class MyEvent extends RealmObject {
     }
 
 
-
+    public String getpKey() {
+        return pKey;
+    }
+    public void setpKey(String pKey){
+        this.pKey = pKey;
+    }
 }

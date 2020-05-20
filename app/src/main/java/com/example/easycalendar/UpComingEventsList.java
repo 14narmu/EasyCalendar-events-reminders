@@ -2,7 +2,6 @@ package com.example.easycalendar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.realm.Realm;
@@ -12,12 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +62,9 @@ private RecyclerView recyclerView_UpcomingEvents;
                     @Override public void onItemClick(View view, int position) {
                         // do whatever
                         Toast.makeText(UpComingEventsList.this, position + " a basıldı", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(UpComingEventsList.this, EditEventActivity.class);
+                        intent.putExtra("position",position);
+                        startActivity(intent);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
