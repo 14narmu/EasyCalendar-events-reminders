@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,19 +19,10 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private MaterialCalendarView myCalendar;
@@ -73,14 +63,12 @@ public class MainActivity extends AppCompatActivity {
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),AddEventActivity.class);
+                Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
                 String date = selectedDate.getDate().toString();
                 intent.putExtra("date",date);
                 startActivity(intent);
             }
         });
-
-
 
 
     }
@@ -100,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         allEvents = new ArrayList<>();
-        
-
         myCalendar = findViewById(R.id.myCalendar);
         addEvent = findViewById(R.id.addEvent);
         btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
@@ -112,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         getEventsFromDb();
         decorateToday();
         calendarDecorate();
+        listDailyEvents();
     }
 
     private void getEventsFromDb() {
@@ -123,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void decorateToday(){
+        //allows us to distinguish today's appearance from other days
         HashSet<CalendarDay> eventDays = new HashSet<>();
         eventDays.add(CalendarDay.today());
         myCalendar.addDecorators(new EventDecorator(1, eventDays,getApplicationContext()));

@@ -21,18 +21,18 @@
         android:background="#DCDCDC">
 
         <Button
-            android:id="@+id/AddEventActivity_btn_back"
+            android:id="@+id/EditEventActivity_btn_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Geri" />
 
         <Button
-            android:id="@+id/btn_completeAddingEvent"
+            android:id="@+id/btn_editEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tamam" />
+            android:text="Güncelle" />
 
     </LinearLayout>
 

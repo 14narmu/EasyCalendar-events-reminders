@@ -77,6 +77,15 @@ public class Time extends RealmObject {
     }
     @Override
     public String toString(){
-        return hour.toString() + sep + minute.toString();
+        String hour_text,minute_text;
+        if(hour < 10)
+            hour_text = "0"+ hour.toString();
+        else
+            hour_text =  hour.toString();
+        if(minute <10)
+            minute_text = "0"+ minute.toString();
+        else
+            minute_text = minute.toString();
+        return hour_text + sep + minute_text;
     }
 }
