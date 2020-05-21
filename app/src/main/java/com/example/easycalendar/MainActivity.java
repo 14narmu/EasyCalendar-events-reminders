@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Realm realm;
 
     private ArrayList<MyEvent> allEvents;
+    private HashMap<String,MyEvent> allEvents2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,21 +76,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void calendarDecorate() {
-        HashSet<CalendarDay> eventDays = new HashSet<>();
-       for (MyEvent aEvent : allEvents){
-           String [] tokens = aEvent.getStartDate().split("-");
-           int year = Integer.valueOf(tokens[0]);
-           int month = Integer.valueOf(tokens[1]);
-           int day = Integer.valueOf(tokens[2]);
-           eventDays.add(CalendarDay.from(year,month,day));
-       }
-
-        myCalendar.addDecorators(new EventDecorator(getColor(R.color.colorAccent), eventDays,getApplicationContext()));
+    private void circleDecorate(){
+        int [] colors = getResources().getIntArray(R.array.demo_colors);
+        HashSet<CalendarDay> eventDays;
+        for(int currentColor : colors) {
+           eventDays = new HashSet<>();
+           for (MyEvent aEvent : allEvents) {
+               if (aEvent.getColor() == currentColor) {
+                   String[] tokens = aEvent.getStartDate().split("-");
+                   int year = Integer.valueOf(tokens[0]);
+                   int month = Integer.valueOf(tokens[1]);
+                   int day = Integer.valueOf(tokens[2]);
+                   eventDays.add(CalendarDay.from(year, month, day));
+               }
+           }
+           myCalendar.addDecorators(new EventDecorator(currentColor, eventDays, getApplicationContext()));
+        }
     }
+ /*   private void circleDecorate(){
+        int [] colors = getResources().getIntArray(R.array.demo_colors);
+        HashSet<CalendarDay> eventDays;
+        for(int currentColor : colors) {
+            eventDays = new HashSet<>();
+            for( String date : allEvents2.keySet()){
 
+            }
+            for (MyEvent aEvent : allEvents) {
+                if (aEvent.getColor() == currentColor) {
+                    String[] tokens = aEvent.getStartDate().split("-");
+                    int year = Integer.valueOf(tokens[0]);
+                    int month = Integer.valueOf(tokens[1]);
+                    int day = Integer.valueOf(tokens[2]);
+                    eventDays.add(CalendarDay.from(year, month, day));
+                }
+            }
+            myCalendar.addDecorators(new EventDecorator(currentColor, eventDays, getApplicationContext()));
+        }
+    }*/
     private void initViews() {
         allEvents = new ArrayList<>();
+        allEvents2 = new HashMap<>();
         myCalendar = findViewById(R.id.myCalendar);
         addEvent = findViewById(R.id.addEvent);
         btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
@@ -97,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         getEventsFromDb();
         decorateToday();
-        calendarDecorate();
+        circleDecorate();
         listDailyEvents();
     }
 
@@ -106,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         RealmResults<MyEvent> eventsDb = realm.where(MyEvent.class).findAll();
         for(MyEvent aEvent : eventsDb){
             allEvents.add(aEvent);
+            allEvents2.put(aEvent.getStartDate(),aEvent);
         }
     }
 

@@ -333,6 +333,19 @@
         <item>@color/md_grey_500</item>
         <item>@color/md_blue_grey_500</item>
     </array>
+    <array name="colors2">
+        <item>@color/md_red_500</item>
+
+        <item>@color/md_deep_purple_500</item>
+
+
+        <item>@color/md_light_blue_500</item>
+
+
+
+        <item>@color/md_orange_500</item>
+
+    </array>
 </resources>
 
 

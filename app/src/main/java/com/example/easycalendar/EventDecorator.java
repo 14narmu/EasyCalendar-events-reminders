@@ -1,24 +1,19 @@
 package com.example.easycalendar;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
+import android.os.Build;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
-import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
-
-import org.threeten.bp.LocalDate;
-
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
+
+
 
 public class EventDecorator implements DayViewDecorator {
 
@@ -48,11 +43,33 @@ public class EventDecorator implements DayViewDecorator {
 
           //  view.setBackgroundDrawable(context.getDrawable(R.drawable.circle3));
             //view.setBackgroundDrawable(context.getDrawable(R.drawable.circle2));
-        }else
-            view.setBackgroundDrawable(context.getDrawable(R.drawable.circle));
-        /*
-        ShapeDrawable circle = new ShapeDrawable( new OvalShape() );
-        view.setBackgroundDrawable(circle);*/
+        }else {
 
+           // int [] colors = context.getResources().getIntArray(R.array.colors2);
+
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.OVAL);
+           // shape.setColor(color);
+            shape.setStroke(6,color,6,4);
+            shape.setCornerRadii(new float[]{0, 0, 0, 0, 0, 0, 0, 0});
+            //shape.setColor(color);
+            //shape.setStroke(5, color);/*
+           // GradientDrawable [] drawables = new GradientDrawable[1];
+            //drawables[0] = shape;
+/*
+            GradientDrawable shape2 = new GradientDrawable();
+            shape2.setShape(GradientDrawable.RADIAL_GRADIENT);
+            shape2.setGradientRadius(new Float(45));
+            shape2.setCornerRadii(new float[]{0, 0, 0, 0, 0, 0, 0, 0});
+            //shape.setColor();
+            shape2.setStroke(5, context.getColor(R.color.colorAccent));
+            drawables[1] = shape2;*/
+
+           // LayerDrawable a = new LayerDrawable(drawables);
+            //a.addLayer(shape);
+            //view.setBackgroundDrawable(context.getDrawable(R.drawable.circle));
+
+            view.setBackgroundDrawable(shape);
+        }
     }
 }
