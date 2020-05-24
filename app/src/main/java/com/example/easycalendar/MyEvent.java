@@ -1,8 +1,5 @@
 package com.example.easycalendar;
 
-import android.location.Location;
-
-
 
 import org.threeten.bp.LocalDate;
 

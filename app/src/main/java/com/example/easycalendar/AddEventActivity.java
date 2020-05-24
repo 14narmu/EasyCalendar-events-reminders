@@ -11,25 +11,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.time.LocalDate;
+
 public class AddEventActivity extends AppCompatActivity implements View.OnClickListener{
     private Realm realm;
     private Button btn_addEvent;
     private Button btn_back;
+    String chosenDate;
     EventInformationFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        Intent intent = getIntent();
+        chosenDate = intent.getStringExtra("date");
+
         initViews();
 
+        createFragment();
+
+
+    }
+
+    private void createFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragment = new EventInformationFragment();
+        fragment = new EventInformationFragment().newInstance(chosenDate);
         fragmentTransaction.add(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
-
     }
 
     private void initViews() {

@@ -3,6 +3,7 @@ package com.example.easycalendar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -18,9 +19,11 @@ import android.widget.Button;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.format.DayFormatter;
 
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +31,9 @@ import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity {
     private MaterialCalendarView myCalendar;
+    private TextView dayNum;
+    private TextView monthAndYear;
+    private ImageButton preferences;
     private Button addEvent;
     private CalendarDay selectedDate;
     private ImageButton btn_upcomingEvents;
@@ -39,12 +45,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setTheme(android.R.style.);
         setContentView(R.layout.activity_main);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         initViews();
+        setListeners();
+
+        myCalendar.setSelectionColor(getColor(R.color.colorAccent));
 
 
 
+
+    }
+
+    private void setListeners() {
+
+        preferences.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -72,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void circleDecorate(){
@@ -120,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
         addEvent = findViewById(R.id.addEvent);
         btn_upcomingEvents = findViewById(R.id.btn_upcomingEvents);
         dailyEventList = findViewById(R.id.dailyEventList);
+        monthAndYear = findViewById(R.id.MainActivity_monthNameAndYear);
+        dayNum = findViewById(R.id.MainActivity_dayNumber);
+        preferences = findViewById(R.id.MainActivity_btn_preferences);
         selectedDate = CalendarDay.today();
         myCalendar.setDateSelected(CalendarDay.today(),true);
         realm = Realm.getDefaultInstance();
@@ -143,6 +167,13 @@ public class MainActivity extends AppCompatActivity {
         HashSet<CalendarDay> eventDays = new HashSet<>();
         eventDays.add(CalendarDay.today());
         myCalendar.addDecorators(new EventDecorator(1, eventDays,getApplicationContext()));
+
+        //add today's date to top bar
+        String month = getResources().getStringArray
+                (R.array.months)[CalendarDay.today().getMonth()-1];
+        dayNum.setText(String.valueOf(CalendarDay.today().getDay()));
+        monthAndYear.setText(month + " " +CalendarDay.today().getYear());
+
     }
     private void listDailyEvents(){
 

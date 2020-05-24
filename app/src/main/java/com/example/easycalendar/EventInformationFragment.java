@@ -1,14 +1,11 @@
 package com.example.easycalendar;
 
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -70,14 +66,12 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
 
     TimePickerDialog timePickerDialog;
-    private String selectedDate = "2020-05-20";
     private AlertDialog.Builder builder_palette;
     private  View paletteView;
     private  View datePickerView;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String chosenDate;
 
     public EventInformationFragment() {
         // Required empty public constructor
@@ -88,15 +82,13 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment EventInformationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventInformationFragment newInstance(String param1, String param2) {
+    public static EventInformationFragment newInstance(String param1) {
         EventInformationFragment fragment = new EventInformationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -106,8 +98,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            chosenDate = getArguments().getString(ARG_PARAM1);
         }
 
 
@@ -299,12 +290,10 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         spinner_recurrance.setSelection(0);
         spinner_category.setSelection(0);
 
-        tv_startDate.setText( selectedDate);
-        tv_endDate .setText( selectedDate);
-
-
-
-
+        if (getArguments() != null) {
+            tv_startDate.setText(chosenDate);
+            tv_endDate.setText(chosenDate);
+        }
 
     }
 

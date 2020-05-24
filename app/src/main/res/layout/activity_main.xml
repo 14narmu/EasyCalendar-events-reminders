@@ -37,13 +37,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_toLeftOf="@+id/menu"
+            android:layout_toLeftOf="@+id/MainActivity_btn_preferences"
             android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/MainActivity_dayNumber"
                 android:layout_marginLeft="115dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -51,6 +52,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"/>
             <TextView
+                android:id="@+id/MainActivity_monthNameAndYear"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -60,7 +62,7 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/menu"
+            android:id="@+id/MainActivity_btn_preferences"
             android:layout_alignParentRight= "true"
             android:alpha="0.75"
             android:background="@drawable/baseline_more_vert_black_18dp"
@@ -86,8 +88,9 @@
                 android:id="@+id/myCalendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:outlineAmbientShadowColor="@color/colorAccent"
                 app:mcv_showOtherDates="none"
-                android:background="#FFFFFF"
                 app:mcv_tileWidth="55dp"
                 app:mcv_tileHeight="45dp"
 
@@ -96,8 +99,15 @@
                 android:id="@+id/addEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/ButtonStyle123"
                 android:text="Etkinlik ekle"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/colorPrimary"/>
             <ListView
+                android:padding="5dp"
+                android:background="@color/secondary"
                 android:id="@+id/dailyEventList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

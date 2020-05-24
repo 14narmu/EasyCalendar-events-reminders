@@ -19,7 +19,6 @@
         <item>Bayram</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="notificationOptions_array">
         <item>Bildirim Yok</item>
         <item>10 dk önce</item>
@@ -27,6 +26,21 @@
         <item>30 dk önce</item>
         <item>1 saat önce</item>
         <item>2 saat önce</item>
+    </string-array>
+
+    <string-array name="months">
+        <item>Ocak</item>
+        <item>Şubat</item>
+        <item>Mart</item>
+        <item>Nisan</item>
+        <item>Mayıs</item>
+        <item>Haziran</item>
+        <item>Temmuz</item>
+        <item>Ağustos</item>
+        <item>Eylül</item>
+        <item>Ekim</item>
+        <item>Kasım</item>
+        <item>Aralık</item>
     </string-array>
 </resources>
 

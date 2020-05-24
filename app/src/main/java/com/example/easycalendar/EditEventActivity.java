@@ -41,10 +41,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 updateEventFromDb(eventPos);
                 break;
             case R.id.EditEventActivity_btn_back:
-                //TODO EDIT
-                RealmResults<MyEvent> allEvents = realm.where(MyEvent.class).findAll();
-                MyEvent myEvent = allEvents.get(eventPos);
-                fragment.setInputs(myEvent);
+                finish();
                 break;
             default:
                 break;
