@@ -48,12 +48,14 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
     private int eventColor= -16537100; //default color
     private Spinner spinner_notification;
-    private Spinner spinner_recurrance;
+    private Spinner spinner_recurrence;
     private Spinner spinner_category;
     private Spinner spinner_emailNotification;
     private ImageButton btn_setNotificationToNone;
-    private ImageButton  btn_setRecurranceToNone;
+    private ImageButton btn_setRecurrenceToNone;
+    private ImageButton btn_setLocationToNone;
     private ImageButton  btn_showPalette;
+
 
     private TextView notiftv;
     private EditText edtTxt_email;
@@ -116,11 +118,12 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
     private void setListeners() {
         btn_setNotificationToNone.setOnClickListener(this);
-        btn_setRecurranceToNone.setOnClickListener(this);
+        btn_setRecurrenceToNone.setOnClickListener(this);
+        btn_setLocationToNone.setOnClickListener(this);
         btn_showPalette.setOnClickListener(this);
         spinner_notification.setOnItemSelectedListener(this);
         spinner_emailNotification.setOnItemSelectedListener(this);
-        spinner_recurrance.setOnItemSelectedListener(this);
+        spinner_recurrence.setOnItemSelectedListener(this);
         spinner_category.setOnItemSelectedListener(this);
         tv_startTime.setOnClickListener(this);
         tv_startDate.setOnClickListener(this);
@@ -182,7 +185,10 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
                 spinner_notification.setSelection(0);
                 break;
             case R.id.btn_setRecurranceToNone:
-                spinner_recurrance.setSelection(0);
+                spinner_recurrence.setSelection(0);
+                break;
+            case R.id.btn_setLocationToNone:
+                tv_location.setText("Konum Ekle");
                 break;
             case R.id.btn_showPalette:
                 showPaletteLayout();
@@ -251,9 +257,9 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.spinner_recurrance:
                 if(position != 0 )
-                    btn_setRecurranceToNone.setVisibility(View.VISIBLE);
+                    btn_setRecurrenceToNone.setVisibility(View.VISIBLE);
                 else
-                    btn_setRecurranceToNone.setVisibility(View.INVISIBLE);
+                    btn_setRecurrenceToNone.setVisibility(View.INVISIBLE);
                 break;
             case R.id.spinner_emailNotification:
                 if(position ==0 )
@@ -276,11 +282,12 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
 
         spinner_notification = getActivity().findViewById(R.id.spinner_notification);
-        spinner_recurrance = getActivity().findViewById(R.id.spinner_recurrance);
+        spinner_recurrence = getActivity().findViewById(R.id.spinner_recurrance);
         spinner_category = getActivity().findViewById(R.id.spinner_category);
         spinner_emailNotification= getActivity().findViewById(R.id.spinner_emailNotification);
         btn_setNotificationToNone = getActivity().findViewById(R.id.btn_setNotificationToNone);
-        btn_setRecurranceToNone = getActivity().findViewById(R.id.btn_setRecurranceToNone);
+        btn_setRecurrenceToNone = getActivity().findViewById(R.id.btn_setRecurranceToNone);
+        btn_setLocationToNone= getActivity().findViewById(R.id.btn_setLocationToNone);
         btn_showPalette =getActivity(). findViewById(R.id.btn_showPalette);
         chckbox_email =getActivity().findViewById(R.id.checkbo_email);
         checkbox_rememberEmail =getActivity().findViewById(R.id.checkbox_rememberEmail);
@@ -304,7 +311,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         ArrayAdapter<CharSequence> adptr_recurrance = ArrayAdapter.createFromResource(getActivity(),
                 R.array.recurranceOptions_array, android.R.layout.simple_spinner_item);
         adptr_recurrance.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_recurrance.setAdapter(adptr_recurrance);
+        spinner_recurrence.setAdapter(adptr_recurrance);
 
         ArrayAdapter<CharSequence> adptr_category = ArrayAdapter.createFromResource(getActivity(),
                 R.array.categoryOptions_array, android.R.layout.simple_spinner_item);
@@ -313,7 +320,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
         // Starting positions of spinners
         spinner_notification.setSelection(1);
-        spinner_recurrance.setSelection(0);
+        spinner_recurrence.setSelection(0);
         spinner_category.setSelection(0);
 
         if (getArguments() != null) {
@@ -406,7 +413,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
         int notification = spinner_notification.getSelectedItemPosition();
         String notes = edtTxt_notes.getText().toString();
-        int reccurance = spinner_recurrance.getSelectedItemPosition();
+        int reccurance = spinner_recurrence.getSelectedItemPosition();
 
         MyEvent myEvent = new MyEvent(eventName, eventCategory,eventColor,startTime,endTime,startDate,endDate,notification,notes,reccurance);
         return myEvent;
@@ -417,7 +424,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
         //TODO edit
        spinner_notification.setSelection(myEvent.getIndex_notification());
-      spinner_recurrance.setSelection(myEvent.getIndex_recurrence());
+      spinner_recurrence.setSelection(myEvent.getIndex_recurrence());
        spinner_category.setSelection(myEvent.getIndex_category());
       spinner_emailNotification.setSelection(myEvent.getEmail_notification());
 
