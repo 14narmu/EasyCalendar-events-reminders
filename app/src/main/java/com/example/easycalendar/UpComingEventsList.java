@@ -10,6 +10,7 @@ import io.realm.RealmResults;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -93,7 +94,7 @@ private RecyclerView recyclerView_UpcomingEvents;
         recyclerView_UpcomingEvents.setAdapter(eventAdapter);
     }
 
-    private void deleteEvent(int position) {
+    private void deleteEvent(int position) {/*
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -101,9 +102,29 @@ private RecyclerView recyclerView_UpcomingEvents;
             }
         });
         allEvents.remove(position);
-        Toast.makeText(this, "Etkinlik Silindi", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Etkinlik Silindi", Toast.LENGTH_SHORT).show();*/
+
+
+        String [] pkey = allEvents.get(position).getpKey().split("_");
+        String parentPkey = pkey[0];
+
+        RealmResults<MyEvent> results = realm.where(MyEvent.class)
+                .contains("pKey", parentPkey)
+                .findAll();
+        for (MyEvent aEvent :results){
+            Log.i("event","Pkey "+aEvent.getpKey()+" time "+ aEvent.getStartTime().toString());
+        }
+        Toast.makeText(this, results.size() + " Etkinlik Silindi", Toast.LENGTH_SHORT).show();
+
+        realm.executeTransaction(realm -> {
+            // Delete all matches
+            results.deleteAllFromRealm();
+        });
+        getEventsFromDb();
         setRecyclerView_UpcomingEvents();
     }
+
+
 
     @Override
     public void onClick(View v) {
