@@ -8,6 +8,7 @@ import io.realm.RealmResults;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,15 +18,15 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     private Button btn_editEvent;
     private Button btn_back;
     EventInformationFragment fragment;
-    private int eventPos;
+    private String primaryKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
 
-        //TODO
+
         Intent intent = getIntent();
-        eventPos = intent.getIntExtra("position",0);
+         primaryKey = intent.getStringExtra("primaryKey");
 
         initViews();
         setFragment();
@@ -38,7 +39,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_editEvent:
-                updateEventFromDb(eventPos);
+                updateEventFromDb();
                 break;
             case R.id.EditEventActivity_btn_back:
                 finish();
@@ -48,16 +49,22 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    void updateEventFromDb(int position){
-        RealmResults<MyEvent> allEvents = realm.where(MyEvent.class).findAll();
-        String primaryKey = allEvents.get(position).getpKey();
-        MyEvent myEvent = fragment.getInputs();
-        myEvent.setpKey(primaryKey);
+    void updateEventFromDb(){
 
+        MyEvent myEvent = fragment.getInputs();
+
+        //find parent primary key for recurrence events
+        String [] pkey = primaryKey.split("_");
+        String parentPkey = pkey[0];
+
+        // Updating a boolean field
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(myEvent);
+                RealmResults<MyEvent> results = realm.where(MyEvent.class)
+                        .contains("pKey", parentPkey).findAll();
+                results.setString("eventName", myEvent.getEventName());
+                //TODO set all fields
             }
         });
 
@@ -73,8 +80,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     private void setFragment() {
 
         //getting object
-        RealmResults<MyEvent> allEvents = realm.where(MyEvent.class).findAll();
-        MyEvent myEvent = allEvents.get(eventPos);
+        MyEvent myEvent = realm.where(MyEvent.class).equalTo("pKey",primaryKey).findFirst();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -89,10 +95,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             }
         });
         fragmentTransaction.commit();
-
-
-
-
 
 
 

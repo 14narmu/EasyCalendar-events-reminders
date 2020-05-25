@@ -428,6 +428,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
        spinner_category.setSelection(myEvent.getIndex_category());
       spinner_emailNotification.setSelection(myEvent.getEmail_notification());
 
+        btn_showPalette.setBackgroundColor(myEvent.getColor());
         edtTxt_email.setText(myEvent.getEmail());
        edtTxt_notes.setText(myEvent.getNotes());
         edtTxt_eventName.setText(myEvent.getEventName());
@@ -435,6 +436,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         tv_startDate.setText(myEvent.getStartDate());;
         tv_endTime.setText(myEvent.getEndTime().toString());;
         tv_endDate.setText(myEvent.getEndDate());
+        eventColor = myEvent.getColor();
     }
 
 

@@ -4,8 +4,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,15 +17,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 public class UpComingEventsList extends AppCompatActivity implements View.OnClickListener{
 private RecyclerView recyclerView_UpcomingEvents;
     private LinearLayoutManager layoutManager;
-    private ArrayList<MyEvent> allEvents;
-    private EventAdapter eventAdapter;
+   // private ArrayList<MyEvent> allEvents;
+   RealmResults<MyEvent> eventsDb;
+    private MyRecyclerViewAdapter myRecyclerViewAdapter;
     private ImageButton btn_mainMenu;
     private Realm realm;
     @Override
@@ -37,16 +36,10 @@ private RecyclerView recyclerView_UpcomingEvents;
         recyclerView_UpcomingEvents.setLayoutManager(layoutManager);
         realm = Realm.getDefaultInstance();
 
-        allEvents = new ArrayList<>();
-        //fillEvents(events); //dynamically fills view for debugging
-        getEventsFromDb();
+        eventsDb = realm.where(MyEvent.class).findAll();
 
-        Collections.sort(allEvents, new Comparator<MyEvent>() {
-            @Override
-            public int compare(MyEvent o1, MyEvent o2) {
-                return o1.getStartDate().compareTo(o2.getStartDate());
-            }
-        });
+        eventsDb = eventsDb.sort("startDate", Sort.ASCENDING,
+        "startTime.hour",Sort.ASCENDING );
 
         setRecyclerView_UpcomingEvents();
 
@@ -61,10 +54,10 @@ private RecyclerView recyclerView_UpcomingEvents;
         recyclerView_UpcomingEvents.addOnItemTouchListener(
                 new RecyclerViewItemClickListener(UpComingEventsList.this, recyclerView_UpcomingEvents ,new RecyclerViewItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        // do whatever
+                        String primaryKey = eventsDb.get(position).getpKey();
                         Toast.makeText(UpComingEventsList.this, position + " a basıldı", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UpComingEventsList.this, EditEventActivity.class);
-                        intent.putExtra("position",position);
+                        intent.putExtra("primaryKey",primaryKey);
                         startActivity(intent);
                     }
 
@@ -90,38 +83,25 @@ private RecyclerView recyclerView_UpcomingEvents;
     }
 
     private void setRecyclerView_UpcomingEvents(){
-        eventAdapter = new EventAdapter(this,allEvents);
-        recyclerView_UpcomingEvents.setAdapter(eventAdapter);
+        myRecyclerViewAdapter = new MyRecyclerViewAdapter(getApplicationContext(),eventsDb);
+        recyclerView_UpcomingEvents.setAdapter(myRecyclerViewAdapter);
     }
 
-    private void deleteEvent(int position) {/*
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                allEvents.get(position).deleteFromRealm();
-            }
-        });
-        allEvents.remove(position);
-        Toast.makeText(this, "Etkinlik Silindi", Toast.LENGTH_SHORT).show();*/
+    private void deleteEvent(int position) {
 
-
-        String [] pkey = allEvents.get(position).getpKey().split("_");
+        //find parent primary key for recurrence events
+        String [] pkey = eventsDb.get(position).getpKey().split("_");
         String parentPkey = pkey[0];
 
         RealmResults<MyEvent> results = realm.where(MyEvent.class)
                 .contains("pKey", parentPkey)
                 .findAll();
-        for (MyEvent aEvent :results){
-            Log.i("event","Pkey "+aEvent.getpKey()+" time "+ aEvent.getStartTime().toString());
-        }
-        Toast.makeText(this, results.size() + " Etkinlik Silindi", Toast.LENGTH_SHORT).show();
 
         realm.executeTransaction(realm -> {
             // Delete all matches
             results.deleteAllFromRealm();
         });
-        getEventsFromDb();
-        setRecyclerView_UpcomingEvents();
+        Toast.makeText(this, results.size() + " Etkinlik Silindi", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -137,12 +117,5 @@ private RecyclerView recyclerView_UpcomingEvents;
                 break;
         }
     }
-    private void getEventsFromDb() {
 
-        RealmResults<MyEvent> eventsDb = realm.where(MyEvent.class).findAll();
-        for(MyEvent aEvent : eventsDb){
-            allEvents.add(aEvent);
-            //Log.i("Realm kaydı : ","etkinlik adı" + aEvent.getEventName()+" tarihi" + aEvent.getStartDate());
-        }
-    }
 }
