@@ -1,6 +1,8 @@
 package com.example.easycalendar;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -63,6 +65,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
     private TextView tv_startDate;
     private TextView tv_endTime;
     private TextView tv_endDate;
+    private TextView tv_location;
 
 
     TimePickerDialog timePickerDialog;
@@ -102,8 +105,6 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         }
 
 
-
-
     }
 
     @Override
@@ -125,6 +126,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         tv_startDate.setOnClickListener(this);
         tv_endTime.setOnClickListener(this);
         tv_endDate.setOnClickListener(this);
+        tv_location.setOnClickListener(this);
 
         chckbox_email.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -201,9 +203,32 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
                  */
                 mydatepick();
                 break;
+            case R.id.tv_location:
+                getLocation();
+                break;
             default:
                 break;
         }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                String result= data.getStringExtra("result");
+                tv_location.setText(result);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
+
+    private void getLocation() {
+        Intent intent = new Intent(getActivity(),MapsActivityCurrentPlace.class);
+        intent.putExtra("location",tv_location.getText().toString());
+        startActivityForResult(intent,1);
     }
 
 
@@ -266,6 +291,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         tv_startDate = getActivity().findViewById(R.id.starDate);
         tv_endTime = getActivity().findViewById(R.id.endTime);
         tv_endDate = getActivity().findViewById(R.id.endDate);
+        tv_location = getActivity().findViewById(R.id.tv_location);
 
 
         ArrayAdapter<CharSequence> adptr_notification = ArrayAdapter.createFromResource(getActivity(),

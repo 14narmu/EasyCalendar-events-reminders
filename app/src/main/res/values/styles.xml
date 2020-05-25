@@ -2,11 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/md_black_1000</item>
     </style>
 
     <style name="ButtonStyle123" parent="android:style/Widget.Button">
     <item name="android:padding">5dp</item>
-    <item name="android:textColor">@color/white</item>
+    <item name="android:textColor">@color/md_black_1000</item>
     <item name="android:backgroundTint">@color/colorPrimaryDark</item>
     </style>
 </resources>

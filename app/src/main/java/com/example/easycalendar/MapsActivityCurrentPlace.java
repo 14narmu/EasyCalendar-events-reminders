@@ -14,7 +14,9 @@
 
 package com.example.easycalendar;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +67,9 @@ import androidx.core.content.ContextCompat;
 public class MapsActivityCurrentPlace extends AppCompatActivity
         implements OnMapReadyCallback {
 
+    private Button btn_getLocation;
+    private Button btn_cancel;
+
     private static final String TAG = MapsActivityCurrentPlace.class.getSimpleName();
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
@@ -97,6 +103,7 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
     private LatLng[] mLikelyPlaceLatLngs;
 
     private Marker clickedLoc;
+    private String showLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +115,15 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
+        Intent intent = getIntent();
+        showLocation = intent.getStringExtra("location");
+
+
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
+
+        //Initialize and set listeners for buttons
+        initButtons();
 
         // Construct a PlacesClient
         Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
@@ -162,6 +176,37 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             public void onError(Status status) {
                 // TODO: Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
+
+    private void initButtons() {
+        btn_cancel = findViewById(R.id.MapsActivity_btn_back);
+        btn_getLocation = findViewById(R.id.MapsActivity_btn_choose);
+
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                finish();
+            }
+        });
+
+        btn_getLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                if(clickedLoc == null)
+                    returnIntent.putExtra("result","Konum Ekle");
+                else {
+                    String res = clickedLoc.getPosition().latitude + "," +
+                            clickedLoc.getPosition().longitude;
+                    returnIntent.putExtra("result", res);
+                }
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
             }
         });
     }
@@ -257,6 +302,25 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
 
             }
         });
+
+
+    }
+    /**
+     * Gets the desired location, and positions the map's camera.
+     */
+    private boolean showLocation() {
+        if(showLocation != null && !showLocation.equals("Konum Ekle") ){
+            // Toast.makeText(this, location, Toast.LENGTH_SHORT).show();
+            String[] latLangt = showLocation.split(",");
+            LatLng loc = new LatLng(Double.valueOf(latLangt[0]), Double.valueOf(latLangt[1]));
+            Toast.makeText(this, loc.toString(), Toast.LENGTH_LONG).show();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, DEFAULT_ZOOM));
+            if(clickedLoc != null)
+                clickedLoc.remove();
+            clickedLoc = mMap.addMarker(new MarkerOptions().position(loc).title("Konum"));
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -276,7 +340,8 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
-                            if (mLastKnownLocation != null) {
+                            if(showLocation());
+                            else if (mLastKnownLocation != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastKnownLocation.getLatitude(),
                                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private MaterialCalendarView myCalendar;
     private TextView dayNum;
     private TextView monthAndYear;
@@ -61,13 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners() {
 
-        preferences.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapsActivityCurrentPlace.class);
-                startActivity(intent);
-            }
-        });
 
         myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -77,25 +70,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_upcomingEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(),UpComingEventsList.class);
-                startActivity(intent);
-            }
-        });
-
-
-        addEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
-                String date = selectedDate.getDate().toString();
-                intent.putExtra("date",date);
-                startActivity(intent);
-            }
-        });
+        preferences.setOnClickListener(this);
+        btn_upcomingEvents.setOnClickListener(this);
+        addEvent.setOnClickListener(this);
     }
 
     private void circleDecorate(){
@@ -189,5 +167,26 @@ public class MainActivity extends AppCompatActivity {
 
         DailyEventAdapter adapter_daily =  new DailyEventAdapter(getApplicationContext(),dayEvents);
         dailyEventList.setAdapter(adapter_daily);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()) {
+            case R.id.MainActivity_btn_preferences:
+                intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_upcomingEvents:
+                intent = new Intent(getApplicationContext(),UpComingEventsList.class);
+                startActivity(intent);
+                break;
+            case R.id.addEvent:
+                intent = new Intent(getApplicationContext(), AddEventActivity.class);
+                String date = selectedDate.getDate().toString();
+                intent.putExtra("date",date);
+                startActivity(intent);
+                break;
+        }
     }
 }
