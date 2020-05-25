@@ -391,7 +391,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
 
         //TODO edit
        spinner_notification.setSelection(myEvent.getIndex_notification());
-      spinner_recurrance.setSelection(myEvent.getIndex_recurrance());
+      spinner_recurrance.setSelection(myEvent.getIndex_recurrence());
        spinner_category.setSelection(myEvent.getIndex_category());
       spinner_emailNotification.setSelection(myEvent.getEmail_notification());
 

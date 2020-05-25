@@ -12,7 +12,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().name("realm3").build();
+        RealmConfiguration config = new RealmConfiguration.Builder().name("realmDB").build();
         Realm.setDefaultConfiguration(config);
     }
 }

@@ -75,6 +75,10 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        MyReminder remin = new MyReminder(getApplicationContext(),myEvent);
+        remin.createReminder();
+        remin.createNotificationChannel(1234);
+
         //close the activity and return the menu
         Intent intent = new Intent(AddEventActivity.this,MainActivity.class);
         finish();
@@ -86,6 +90,7 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.btn_completeAddingEvent:
                 addEventToDb();
+
                 break;
             case R.id.AddEventActivity_btn_back:
                 finish();

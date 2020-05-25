@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         preferences.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                Intent intent = new Intent(MainActivity.this, MapsActivityCurrentPlace.class);
                 startActivity(intent);
             }
         });
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         btn_upcomingEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplicationContext(),UpComingEventsList.class);
                 startActivity(intent);
             }

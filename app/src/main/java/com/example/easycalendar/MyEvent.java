@@ -27,14 +27,14 @@ public class MyEvent extends RealmObject {
     private String email;
     private boolean rememberEmail;
     private String notes;
-    private int index_recurrance;
+    private int index_recurrence;
     private String eventLocation;
 
     public MyEvent(){
     }
 
     public MyEvent(String eventName, int index_category, int color, Time startTime, Time endTime,
-                   String startDate, String endDate, int index_notification, String notes, int index_recurrance) {
+                   String startDate, String endDate, int index_notification, String notes, int index_recurrence) {
         this.eventName = eventName;
         this.index_category = index_category;
         this.color = color;
@@ -44,13 +44,13 @@ public class MyEvent extends RealmObject {
         this.endDate = endDate;
         this.index_notification = index_notification;
         this.notes = notes;
-        this.index_recurrance = index_recurrance;
+        this.index_recurrence = index_recurrence;
     }
     public static LocalDate StringToDate(String dateString,char sep){
         String [] tokens = dateString.split(String.valueOf(sep));
         //if(tokens.length != 3)
 
-        LocalDate date = LocalDate.of( Integer.valueOf(tokens[2]), Integer.valueOf(tokens[1]),Integer.valueOf(tokens[0]) );
+        LocalDate date = LocalDate.of( Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1]),Integer.valueOf(tokens[2]) );
         return date;
     }
 
@@ -157,12 +157,12 @@ public class MyEvent extends RealmObject {
         this.notes = notes;
     }
 
-    public int getIndex_recurrance() {
-        return index_recurrance;
+    public int getIndex_recurrence() {
+        return index_recurrence;
     }
 
-    public void setIndex_recurrance(int index_recurrance) {
-        this.index_recurrance = index_recurrance;
+    public void setIndex_recurrence(int index_recurrence) {
+        this.index_recurrence = index_recurrence;
     }
 
     public String getEventLocation() {

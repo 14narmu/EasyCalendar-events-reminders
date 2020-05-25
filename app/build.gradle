@@ -12,7 +12,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
+        resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "AIzaSyAy6R884E5yQ8xXlvB_IkfgUz0fkNUTCM8")
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
