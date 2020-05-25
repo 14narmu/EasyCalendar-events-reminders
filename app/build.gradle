@@ -39,7 +39,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'androidx.cardview:cardview:1.0.0'
-
+    implementation 'io.realm:android-adapters:2.1.1'  //recylerview by realm
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'  //calendarview
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 
