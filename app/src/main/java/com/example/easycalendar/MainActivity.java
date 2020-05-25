@@ -19,7 +19,6 @@ import android.widget.Button;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.format.DayFormatter;
 
 import android.widget.ImageButton;
 import android.widget.ListView;

@@ -11,11 +11,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
+import java.util.ArrayList;
 
 public class AddEventActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private final LocalDate maxDate = LocalDate.of(2050,12,30);
+    private final  int MAX_RECURRENCE_COUNT = 100000;
+
     private Realm realm;
     private Button btn_addEvent;
     private Button btn_back;
@@ -54,14 +59,16 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         btn_back.setOnClickListener(this);
     }
 
-    private void addEventToDb(){
+    private void addEvent(){
 
         MyEvent myEvent = fragment.getInputs();
-
+        ArrayList<MyEvent> myEventsRecurrences = getRecurrenceEvents(myEvent);
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                MyEvent event = realm.copyToRealm(myEvent);
+                for(MyEvent event: myEventsRecurrences){
+                     realm.copyToRealm(event);
+                }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -77,7 +84,7 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
 
         MyReminder remin = new MyReminder(getApplicationContext(),myEvent);
         remin.createReminder();
-        remin.createNotificationChannel(1234);
+        remin.createNotificationChannel();
 
         //close the activity and return the menu
         Intent intent = new Intent(AddEventActivity.this,MainActivity.class);
@@ -85,11 +92,42 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         startActivity(intent);
     }
 
+    private ArrayList<MyEvent> getRecurrenceEvents(MyEvent mainEvent) {
+
+        ArrayList<MyEvent> recurrence = new ArrayList<>();
+        LocalDate startDate = MyEvent.StringToDate(mainEvent.getStartDate(),'-');
+
+        String parentPkey = mainEvent.getpKey();
+
+        recurrence.add(mainEvent);
+        int count = 0;
+        if (mainEvent.getIndex_recurrence() > 0) {
+            while (startDate.isBefore(maxDate) && count < MAX_RECURRENCE_COUNT) {
+                MyEvent childEvent = fragment.getInputs();
+
+                if (mainEvent.getIndex_recurrence() == 1)
+                    startDate = startDate.plusDays(1);
+                else if (mainEvent.getIndex_recurrence() == 2)
+                    startDate = startDate.plusWeeks(1);
+                else if (mainEvent.getIndex_recurrence() == 3)
+                    startDate = startDate.plusMonths(1);
+                else if (mainEvent.getIndex_recurrence() == 4)
+                    startDate = startDate.plusYears(1);
+
+                childEvent.setStartDate(startDate.toString());
+                childEvent.setpKey(parentPkey + "_" + count);
+                count += 1;
+                recurrence.add(childEvent);
+            }
+        }
+        return recurrence;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_completeAddingEvent:
-                addEventToDb();
+                addEvent();
 
                 break;
             case R.id.AddEventActivity_btn_back:

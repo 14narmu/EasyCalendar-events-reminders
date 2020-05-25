@@ -17,9 +17,9 @@ import org.threeten.bp.LocalDate;
 import java.util.Calendar;
 
 public class MyReminder {
+    private static final String CHANNEL_ID = "1234";
     private Context context;
     MyEvent event;
-
     public MyReminder(Context context, MyEvent event) {
         this.context = context;
         this.event = event;
@@ -40,6 +40,8 @@ public class MyReminder {
         intent.putExtra("event_type", eventType);
         intent.putExtra("event_time", event.getStartTime().toString());
         intent.putExtra("event_date", event.getStartDate());
+        intent.putExtra("event_sound",R.raw.promise); //TODO
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         //getting event time and setting alarm
@@ -52,8 +54,22 @@ public class MyReminder {
         Log.i("Alarm", calendar.getTime().toString());
         if(event.getIndex_recurrence() > 0 ){
             // Create Repeating Reminder
-            //TODO
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60, pendingIntent);
+            if(event.getIndex_recurrence() == 1){
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);}
+            else if(event.getIndex_recurrence() == 2){
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY *7, pendingIntent);
+            }else if(event.getIndex_recurrence() == 3){
+                //TODO reset and create again when next month notification occurred
+                long interval = getDuration();
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(), getDuration(), pendingIntent);
+            }
+            else if(event.getIndex_recurrence() == 4){
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY *365, pendingIntent);
+            }
         }else{
             //Create One Shot Reminder
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
@@ -61,12 +77,11 @@ public class MyReminder {
 
     }
 
-    public void createNotificationChannel(Integer source) {
+    public void createNotificationChannel() {
         final String packageName = context.getPackageName();
-        String source_sound = "android.resource://" + packageName + "/" + R.raw.promise;
 
         //  Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        Uri sound = Uri.parse(source_sound);
+        //Uri sound = Uri.parse(source_sound);
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
@@ -75,15 +90,33 @@ public class MyReminder {
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(source.toString(), "events", importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "events", importance);
             channel.setDescription("Calendar events");
-            channel.setSound(sound, audioAttributes);
-            Toast.makeText(context, sound.toString(), Toast.LENGTH_SHORT).show();
+           // channel.setSound(sound, audioAttributes);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
 
         }
+    }
+    private long getDuration(){
+        // get todays date
+        Calendar cal = Calendar.getInstance();
+        // get current month
+        int currentMonth = cal.get(Calendar.MONTH);
+        currentMonth += 1;
+        // check if has not exceeded threshold of december
+        if(currentMonth > Calendar.DECEMBER){
+            currentMonth = Calendar.JANUARY;
+            cal.set(Calendar.YEAR, cal.get(Calendar.YEAR)+1);
+        }
+
+        cal.set(Calendar.MONTH, currentMonth);
+        // get the maximum possible days in this month
+        int maximumDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, maximumDay);
+        long thenTime = cal.getTimeInMillis(); // this is time one month ahead
+        return thenTime; // this is what you set as trigger point time i.e one month after
     }
 }

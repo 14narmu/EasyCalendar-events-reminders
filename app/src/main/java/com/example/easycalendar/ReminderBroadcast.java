@@ -1,23 +1,13 @@
 package com.example.easycalendar;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
+import android.media.MediaPlayer;
+import android.net.Uri;
+
 import java.util.UUID;
 
 import androidx.core.app.NotificationCompat;
@@ -42,10 +32,6 @@ public class ReminderBroadcast extends BroadcastReceiver {
             String source_sound = "android.resource://" + packageName + "R.raw.promise";
             Uri sound = Uri.parse(source_sound);
 
-            // int newRingtoneType = RingtoneManager.TYPE_ALARM;
-            MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.promise);
-            // mediaPlayer.start();
-
         }
     }
 
@@ -56,7 +42,10 @@ public class ReminderBroadcast extends BroadcastReceiver {
         String event_type = intent.getStringExtra("event_type");
         String event_time = intent.getStringExtra("event_time");
         String event_date = intent.getStringExtra("event_date");
+        String alarm_source = intent.getStringExtra("event_sound");
 
+        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.promise);
+        mediaPlayer.start();
 
         Intent fullScreenIntent = new Intent(context, MainActivity.class);
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
@@ -79,31 +68,6 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
     }
 
-    private void createNotificationChannel() {
-        final String packageName = context.getPackageName();
-        // String source_sound ="android.resource://" + packageName+ "/" + "R/raw/promise";
-
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        //  Uri sound = Uri.parse(source_sound);
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                .build();
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "events", importance);
-            channel.setDescription("Calendar events");
-            channel.setSound(sound, null);
-            Toast.makeText(context, sound.toString(), Toast.LENGTH_SHORT).show();
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-
-        }
-    }
 
     private int generateID(String uuid){
         UUID myuuid = UUID.fromString(uuid);
