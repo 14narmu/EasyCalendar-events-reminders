@@ -31,7 +31,7 @@ public class MyReminder {
         //Creating Intent
         Intent intent = new Intent(context, ReminderBroadcast.class);
         intent.setAction("EVENT_REMINDER");
-        //TODO
+        //TODO learn what makes this flags
         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("id", event.getpKey());
         intent.putExtra("event_name", event.getEventName());
@@ -52,6 +52,7 @@ public class MyReminder {
         Log.i("Alarm", calendar.getTime().toString());
         if(event.getIndex_recurrence() > 0 ){
             // Create Repeating Reminder
+            //TODO
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60, pendingIntent);
         }else{
             //Create One Shot Reminder
