@@ -294,11 +294,6 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
                 if(clickedLoc != null)
                     clickedLoc.remove();
                 clickedLoc = mMap.addMarker(new MarkerOptions().position(latLng).title("Konum"));
-                Toast.makeText(
-                        MapsActivityCurrentPlace.this,
-                        "Lat : " + latLng.latitude + " , "
-                                + "Long : " + latLng.longitude,
-                        Toast.LENGTH_LONG).show();
 
             }
         });
@@ -313,7 +308,6 @@ public class MapsActivityCurrentPlace extends AppCompatActivity
             // Toast.makeText(this, location, Toast.LENGTH_SHORT).show();
             String[] latLangt = showLocation.split(",");
             LatLng loc = new LatLng(Double.valueOf(latLangt[0]), Double.valueOf(latLangt[1]));
-            Toast.makeText(this, loc.toString(), Toast.LENGTH_LONG).show();
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, DEFAULT_ZOOM));
             if(clickedLoc != null)
                 clickedLoc.remove();

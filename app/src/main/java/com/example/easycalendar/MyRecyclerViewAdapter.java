@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,6 +59,7 @@ public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<MyEvent, MyR
 
         holder.startTime.setText(getItem(position).getStartTime().toString());
         holder.eventColor.setBackgroundColor(getItem(position).getColor());
+        LocalDate date1 = MyEvent.StringToDate(getItem(position).getStartDate(),'-');
 
     }
 
@@ -74,9 +77,9 @@ public class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<MyEvent, MyR
             eventName = itemView.findViewById(R.id.event_card_eventName);
             eventCategory = itemView.findViewById( R.id.event_card_eventCategory );
             startDate = itemView.findViewById( R.id.event_card_startDate );
-            weekDay = itemView.findViewById( R.id.event_card_weekDay );
             startTime = itemView.findViewById( R.id.event_card_startTime );
             eventColor = itemView.findViewById(R.id.event_card_eventColor);
+
         }
     }
 

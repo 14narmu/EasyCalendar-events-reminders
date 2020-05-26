@@ -46,7 +46,7 @@ private RecyclerView recyclerView_UpcomingEvents;
 
         eventsDb = realm.where(MyEvent.class).findAll();
 
-        eventsDb = eventsDb.sort("startDate", Sort.ASCENDING,
+        eventsDb = eventsDb.sort("startDate", Sort.DESCENDING,
         "startTime.hour",Sort.ASCENDING );
 
         setRecyclerView_UpcomingEvents();
@@ -84,7 +84,6 @@ private RecyclerView recyclerView_UpcomingEvents;
                 if(position == 0)
                     eventsDb = realm.where(MyEvent.class).findAll();
                 setRecyclerView_UpcomingEvents();
-                Toast.makeText(UpComingEventsList.this, year + "-"+month, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -175,7 +174,7 @@ private RecyclerView recyclerView_UpcomingEvents;
             // Delete all matches
             results.deleteAllFromRealm();
         });
-        Toast.makeText(this, results.size() + " Etkinlik Silindi", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Etkinlik Silindi", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -50,6 +50,16 @@
         <item>Aralık</item>
     </string-array>
 
+
+    <string-array name="weekDays">
+        <item>Pzr</item>
+        <item>Pzt</item>
+        <item>Sl</item>
+        <item>Çar</item>
+        <item>Per</item>
+        <item>Cu</item>
+        <item>Cts</item>
+    </string-array>
     <string-array name="intervals_array">
         <item>Tüm Zamanlar</item>
         <item>Bu Yıl</item>

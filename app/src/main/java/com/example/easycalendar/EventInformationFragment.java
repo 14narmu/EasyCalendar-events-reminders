@@ -173,7 +173,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         spectrumPalette.setOnColorSelectedListener(new SpectrumPalette.OnColorSelectedListener() {
             @Override
             public void onColorSelected(int color) {
-                Toast.makeText(getActivity(), "CoLOR : " + color, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "CoLOR : " + color, Toast.LENGTH_SHORT).show();
                 btn_showPalette.setBackgroundColor(color);
                 eventColor = color;
             }
@@ -350,7 +350,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
                             if( oneDayEvent && selectedTime.isBefore(startTime) )
                                 Toast.makeText(getActivity(), "Hatalı bitiş zamanı", Toast.LENGTH_SHORT).show();
                             else
-                                tv_endTime.setText(hourOfDay + ":" + minute);
+                                tv_endTime.setText(selectedTime.toString());
                         }
 
                     }
