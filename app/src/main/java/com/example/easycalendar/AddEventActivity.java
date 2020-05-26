@@ -82,9 +82,12 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        MyReminder remin = new MyReminder(getApplicationContext(),myEvent);
-        remin.createReminder();
-        remin.createNotificationChannel();
+        if(myEvent.getIndex_notification() != 0) {
+            // if notfication is desirable
+            MyReminder remin = new MyReminder(getApplicationContext(), myEvent);
+            remin.createReminder();
+            remin.createNotificationChannel();
+        }
 
         //close the activity and return the menu
         Intent intent = new Intent(AddEventActivity.this,MainActivity.class);

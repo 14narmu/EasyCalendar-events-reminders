@@ -64,7 +64,19 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 RealmResults<MyEvent> results = realm.where(MyEvent.class)
                         .contains("pKey", parentPkey).findAll();
                 results.setString("eventName", myEvent.getEventName());
-                //TODO set all fields
+                results.setInt("index_category", myEvent.getIndex_category());
+                results.setString("startDate", myEvent.getStartDate());
+                results.setString("endDate", myEvent.getEndDate());
+                results.setInt("index_notification", myEvent.getIndex_notification());
+                results.setInt("email_notification", myEvent.getEmail_notification());
+                results.setString("notes", myEvent.getNotes());
+                results.setInt("index_recurrence", myEvent.getIndex_recurrence());
+                results.setString("eventLocation", myEvent.getEventLocation());
+                results.setInt("color", myEvent.getColor());
+                results.setInt("index_ringtone", myEvent.getIndex_ringtone());
+
+
+                //TODO update notification
             }
         });
 

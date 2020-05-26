@@ -88,30 +88,31 @@
                 android:id="@+id/myCalendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                app:mcv_dateTextAppearance="@color/textPrimary"
+                android:background="@color/backGround"
                 android:outlineAmbientShadowColor="@color/colorAccent"
                 app:mcv_showOtherDates="none"
                 app:mcv_tileWidth="55dp"
-                app:mcv_tileHeight="45dp"
-
-                app:mcv_selectionColor="@color/colorPrimaryDark"/>
+                app:mcv_tileHeight="50dp"
+                app:mcv_selectionColor="@color/textPrimary"/>
             <Button
                 android:id="@+id/addEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/ButtonStyle123"
-                android:text="Etkinlik ekle"/>
+                android:textAllCaps="true"
+                android:text="Etkinlik Ekle"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:background="@color/colorPrimary"/>
+                android:background="@color/colorPrimaryDark"/>
+
             <ListView
-                android:padding="5dp"
-                android:background="@color/secondary"
                 android:id="@+id/dailyEventList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </ListView>
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark"
+                android:padding="5dp"></ListView>
         </LinearLayout>
     </ScrollView>
 

@@ -42,9 +42,9 @@ public class ReminderBroadcast extends BroadcastReceiver {
         String event_type = intent.getStringExtra("event_type");
         String event_time = intent.getStringExtra("event_time");
         String event_date = intent.getStringExtra("event_date");
-        String alarm_source = intent.getStringExtra("event_sound");
+        int ringtone = intent.getIntExtra("event_sound",R.raw.tone1);
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.promise);
+        MediaPlayer mediaPlayer = MediaPlayer.create(context,ringtone);
         mediaPlayer.start();
 
         Intent fullScreenIntent = new Intent(context, MainActivity.class);

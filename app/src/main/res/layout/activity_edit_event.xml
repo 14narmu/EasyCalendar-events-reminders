@@ -22,12 +22,14 @@
 
         <Button
             android:id="@+id/EditEventActivity_btn_back"
+            style="@style/ButtonStyle123"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Geri" />
 
         <Button
+            style="@style/ButtonStyle123"
             android:id="@+id/btn_editEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,8 +14,12 @@
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".EditEventActivity" />
         <activity android:name=".AddEventActivity" />
-
-        <activity android:name=".UpComingEventsList" />
+        <activity android:name=".UpComingEventsList" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MapsActivityCurrentPlace"/>
         <activity android:name=".MainActivity">
             <intent-filter>

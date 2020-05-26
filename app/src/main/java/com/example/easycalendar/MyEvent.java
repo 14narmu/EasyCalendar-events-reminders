@@ -18,6 +18,7 @@ public class MyEvent extends RealmObject {
     private String eventName;
     private int index_category;
     private int color =-6543440;
+    private int index_ringtone;
     private Time startTime;
     private Time endTime;
     private String startDate;
@@ -34,7 +35,8 @@ public class MyEvent extends RealmObject {
     }
 
     public MyEvent(String eventName, int index_category, int color, Time startTime, Time endTime,
-                   String startDate, String endDate, int index_notification, String notes, int index_recurrence) {
+                   String startDate, String endDate, int index_notification, String notes,
+                   int index_recurrence,int index_ringtone,String eventLocation) {
         this.eventName = eventName;
         this.index_category = index_category;
         this.color = color;
@@ -45,6 +47,8 @@ public class MyEvent extends RealmObject {
         this.index_notification = index_notification;
         this.notes = notes;
         this.index_recurrence = index_recurrence;
+        this.index_ringtone = index_ringtone;
+        this.eventLocation= eventLocation;
     }
     public static LocalDate StringToDate(String dateString,char sep){
         String [] tokens = dateString.split(String.valueOf(sep));
@@ -173,6 +177,13 @@ public class MyEvent extends RealmObject {
         this.eventLocation = eventLocation;
     }
 
+    public int getIndex_ringtone() {
+        return index_ringtone;
+    }
+
+    public void setIndex_ringtone(int index_ringtone) {
+        this.index_ringtone = index_ringtone;
+    }
 
     public String getpKey() {
         return pKey;

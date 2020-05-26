@@ -13,7 +13,5 @@ public class SelectMapLocation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map_location);
-
-
     }
 }

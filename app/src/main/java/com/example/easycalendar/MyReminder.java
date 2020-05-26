@@ -7,10 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.threeten.bp.LocalDate;
 
@@ -31,8 +29,7 @@ public class MyReminder {
         //Creating Intent
         Intent intent = new Intent(context, ReminderBroadcast.class);
         intent.setAction("EVENT_REMINDER");
-        //TODO learn what makes this flags
-        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("id", event.getpKey());
         intent.putExtra("event_name", event.getEventName());
         String eventType = context.getResources().
@@ -40,7 +37,8 @@ public class MyReminder {
         intent.putExtra("event_type", eventType);
         intent.putExtra("event_time", event.getStartTime().toString());
         intent.putExtra("event_date", event.getStartDate());
-        intent.putExtra("event_sound",R.raw.promise); //TODO
+        intent.putExtra("event_sound", getRingtoneSource(event.getIndex_ringtone()));
+
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
@@ -49,8 +47,25 @@ public class MyReminder {
         Calendar calendar = Calendar.getInstance();
         LocalDate eventDate = MyEvent.StringToDate(event.getStartDate(),'-');
         Time eventTime = event.getStartTime();
+
         calendar.set(eventDate.getYear(), eventDate.getMonthValue()-1, eventDate.getDayOfMonth(),
                 eventTime.getHour(), eventTime.getMinute(), 0);
+        switch (event.getIndex_notification()){
+            case 1:
+                calendar.add(Calendar.MINUTE,-10);
+                break;
+            case 2:
+                calendar.add(Calendar.MINUTE,-30);
+                break;
+            case 3:
+                calendar.add(Calendar.HOUR,-1);
+                break;
+            case 4:
+                calendar.add(Calendar.HOUR,-24);
+                break;
+            default:
+                break;
+        }
         Log.i("Alarm", calendar.getTime().toString());
         if(event.getIndex_recurrence() > 0 ){
             // Create Repeating Reminder
@@ -75,6 +90,23 @@ public class MyReminder {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
 
+    }
+
+    private int getRingtoneSource(int index) {
+        switch (index){
+            case 0:
+                return R.raw.tone1;
+            case 1:
+                return R.raw.tone2;
+            case 2:
+                return R.raw.tone3;
+            case 3:
+                return R.raw.tone4;
+            case 4:
+                return R.raw.tone5;
+            default:
+                return R.raw.tone1;
+        }
     }
 
     public void createNotificationChannel() {

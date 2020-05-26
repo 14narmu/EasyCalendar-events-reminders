@@ -18,9 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#DCDCDC">
+        android:background="@color/background2">
 
         <Button
+            style="@style/ButtonStyle123"
             android:id="@+id/AddEventActivity_btn_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +30,7 @@
 
         <Button
             android:id="@+id/btn_completeAddingEvent"
+            style="@style/ButtonStyle123"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

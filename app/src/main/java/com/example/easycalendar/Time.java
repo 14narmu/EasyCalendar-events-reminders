@@ -75,6 +75,7 @@ public class Time extends RealmObject {
             return false;
         return ! this.isAfter(aTime);
     }
+
     @Override
     public String toString(){
         String hour_text,minute_text;

@@ -9,11 +9,13 @@ import io.realm.RealmResults;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -25,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -38,24 +41,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton btn_upcomingEvents;
     private ListView dailyEventList;
     private Realm realm;
-
+    private ArrayList<MyEvent> dayEvents;
     private ArrayList<MyEvent> allEvents;
     private HashMap<String,MyEvent> allEvents2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setTheme(android.R.style.);
-        setContentView(R.layout.activity_main);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        setContentView(R.layout.activity_main);
+
+        getDayMode();
         initViews();
+        getEventsFromDb();
+        decorateToday();
+        circleDecorate();
+        listDailyEvents();
         setListeners();
 
-        myCalendar.setSelectionColor(getColor(R.color.colorAccent));
 
+    }
 
-
-
+    private void getDayMode() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("default", getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        Boolean nightMode = pref.getBoolean("mode",false);
+        if(nightMode)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     private void setListeners() {
@@ -66,6 +79,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 selectedDate = date;
                 listDailyEvents();
+            }
+        });
+
+        dailyEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String pKey = dayEvents.get(position).getpKey();
+                Intent intent = new Intent(MainActivity.this,EditEventActivity.class);
+                intent.putExtra("primaryKey",pKey);
+                startActivity(intent);
             }
         });
 
@@ -125,10 +148,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         selectedDate = CalendarDay.today();
         myCalendar.setDateSelected(CalendarDay.today(),true);
         realm = Realm.getDefaultInstance();
-        getEventsFromDb();
-        decorateToday();
-        circleDecorate();
-        listDailyEvents();
     }
 
     private void getEventsFromDb() {
@@ -152,10 +171,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dayNum.setText(String.valueOf(CalendarDay.today().getDay()));
         monthAndYear.setText(month + " " +CalendarDay.today().getYear());
 
+        myCalendar.setSelectionColor(getColor(R.color.colorAccent));
+
     }
     private void listDailyEvents(){
 
-        ArrayList<MyEvent> dayEvents = new ArrayList<>();
+        dayEvents = new ArrayList<>();
 
         for(MyEvent aEvent : allEvents){
 
@@ -164,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+        dayEvents.sort(new Comparator<MyEvent>() {
+            @Override
+            public int compare(MyEvent o1, MyEvent o2) {
+                return o1.getStartTime().toString().compareTo(o2.getStartTime().toString());
+            }
+        });
         DailyEventAdapter adapter_daily =  new DailyEventAdapter(getApplicationContext(),dayEvents);
         dailyEventList.setAdapter(adapter_daily);
     }

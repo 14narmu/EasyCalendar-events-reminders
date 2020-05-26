@@ -17,7 +17,7 @@
                 android:id="@+id/leftSide"
                 android:layout_width="50dp"
                 android:orientation="vertical"
-                android:background="#FFFFFF"
+                android:background="@color/background2"
                 android:layout_height="match_parent">
                 <LinearLayout
 
@@ -25,7 +25,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp">
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
@@ -38,8 +38,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp">
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
@@ -52,7 +51,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="125dp"
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp">
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
@@ -65,7 +64,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp">
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
@@ -78,7 +77,8 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp"
+ >
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
@@ -91,7 +91,8 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp"
+ >
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
@@ -103,24 +104,26 @@
                     android:layout_marginTop="1dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:background="#FFFFFF">
+                    android:layout_height="75dp"
+                    android:paddingTop="5dp"
+ >
                     <ImageView
                         android:alpha="0.75"
                         android:layout_gravity="top"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/baseline_account_circle_black_18dp"/>
+                        android:background="@drawable/baseline_music_note_black_18dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="1dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                    android:paddingTop="5dp"
+ >
                     <ImageView
                         android:alpha="0.75"
-                        android:layout_gravity="center"
+                        android:layout_gravity="top"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/baseline_location_on_black_18dp"/>
@@ -145,7 +148,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/background2">
 
                     <EditText
                         android:id="@+id/edtTxt_eventName"
@@ -155,8 +158,7 @@
                         android:layout_height="match_parent"
                         android:inputType="text"
                         android:layout_weight="1"
-                        android:hint="Başlık"
-                        android:background="#FFFFFF">
+                        android:hint="Başlık">
                     </EditText>
 
 
@@ -166,10 +168,10 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/background2">
                     <Spinner
                         android:id="@+id/spinner_category"
-                        android:background="#FFFFFF"
+                     android:background="@color/background2"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -180,7 +182,7 @@
                         android:layout_height="wrap_content"
                         >
                         <ImageButton
-                            android:background="#FFFFFF"
+                         android:background="@color/background2"
                             android:id="@+id/btn_showPalette"
                             android:backgroundTintMode="src_over"
                             android:alpha="0.75"
@@ -198,7 +200,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="125dp"
-                    android:background="#FFFFFF">
+                 android:background="@color/background2">
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -281,7 +283,7 @@
                     android:divider="@drawable/divider2"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:background="#FFFFFF">
+                 android:background="@color/background2">
                     <LinearLayout
 
                         android:orientation="horizontal"
@@ -290,7 +292,7 @@
                         android:layout_weight="1">
                         <Spinner
                             android:id="@+id/spinner_notification"
-                            android:background="#FFFFFF"
+                             android:background="@color/background2"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
@@ -322,7 +324,7 @@
                             android:textAlignment="center"
                             android:layout_marginLeft="15dp"
                             android:id="@+id/spinner_emailNotification"
-                            android:background="#FFFFFF"
+                         android:background="@color/background2"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
@@ -345,7 +347,7 @@
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:textStyle="bold"
-                            android:hint="example@example.com"
+                            android:hint="bu özellik devre dışı!"
                             android:alpha="0.5"
                             android:layout_height="match_parent">
                         </EditText>
@@ -366,15 +368,15 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                 android:background="@color/background2">
                     <EditText
                         android:id="@+id/edtTxt_notes"
                         android:padding="5dp"
-                        android:background="#FFFFFF"
+                     android:background="@color/background2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textMultiLine"
-                        android:text="Bu bir not örneğidir buraya notlarınızı girebilirsiniz">
+                        android:hint="not ekle">
 
                     </EditText>
                 </LinearLayout>
@@ -383,10 +385,10 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                 android:background="@color/background2">
                     <Spinner
                         android:id="@+id/spinner_recurrance"
-                        android:background="#FFFFFF"
+                     android:background="@color/background2"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -406,9 +408,14 @@
                     android:padding="5dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:background="#FFFFFF">
-
+                    android:layout_height="75dp"
+                 android:background="@color/background2">
+                    <Spinner
+                        android:id="@+id/spinner_ringtones"
+                     android:background="@color/background2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </Spinner>
 
 
                 </LinearLayout>
@@ -418,7 +425,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    android:background="#FFFFFF">
+                 android:background="@color/background2">
 
                     <TextView
                         android:id="@+id/tv_location"

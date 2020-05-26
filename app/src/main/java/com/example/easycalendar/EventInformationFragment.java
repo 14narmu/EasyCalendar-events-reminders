@@ -3,6 +3,7 @@ package com.example.easycalendar;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
     private Spinner spinner_recurrence;
     private Spinner spinner_category;
     private Spinner spinner_emailNotification;
+    private Spinner spinner_ringtones;
     private ImageButton btn_setNotificationToNone;
     private ImageButton btn_setRecurrenceToNone;
     private ImageButton btn_setLocationToNone;
@@ -125,6 +127,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         spinner_emailNotification.setOnItemSelectedListener(this);
         spinner_recurrence.setOnItemSelectedListener(this);
         spinner_category.setOnItemSelectedListener(this);
+        spinner_ringtones.setOnItemSelectedListener(this);
         tv_startTime.setOnClickListener(this);
         tv_startDate.setOnClickListener(this);
         tv_endTime.setOnClickListener(this);
@@ -202,13 +205,6 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
             case R.id.starDate:
                 mydatepick();
                 break;
-            case R.id.endDate:
-                //TODO
-                /* take a parameter start or end date for mydatepick func
-                   if user selects a date before the start date, unselect the selection
-                 */
-                mydatepick();
-                break;
             case R.id.tv_location:
                 getLocation();
                 break;
@@ -284,6 +280,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         spinner_notification = getActivity().findViewById(R.id.spinner_notification);
         spinner_recurrence = getActivity().findViewById(R.id.spinner_recurrance);
         spinner_category = getActivity().findViewById(R.id.spinner_category);
+        spinner_ringtones = getActivity().findViewById(R.id.spinner_ringtones);
         spinner_emailNotification= getActivity().findViewById(R.id.spinner_emailNotification);
         btn_setNotificationToNone = getActivity().findViewById(R.id.btn_setNotificationToNone);
         btn_setRecurrenceToNone = getActivity().findViewById(R.id.btn_setRecurranceToNone);
@@ -318,10 +315,13 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         adptr_category.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_category.setAdapter(adptr_category);
 
+        ArrayAdapter<CharSequence> adptr_ringtones = ArrayAdapter.createFromResource(getActivity(),
+                R.array.ringtones_array, android.R.layout.simple_spinner_item);
+        adptr_ringtones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_ringtones.setAdapter(adptr_ringtones);
+
         // Starting positions of spinners
-        spinner_notification.setSelection(1);
-        spinner_recurrence.setSelection(0);
-        spinner_category.setSelection(0);
+        getSharedPreferences();
 
         if (getArguments() != null) {
             tv_startDate.setText(chosenDate);
@@ -348,9 +348,7 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
                             Time startTime = new Time(tv_startTime.getText().toString(),":");
                             Boolean oneDayEvent = tv_startDate.getText().toString().equals(tv_endDate.getText().toString());
                             if( oneDayEvent && selectedTime.isBefore(startTime) )
-                                //TODO fix
-                                //Toast.makeText(, "Hatalı bitiş zamanı", Toast.LENGTH_SHORT).show();
-                                Log.i("warning","Hatalı bitiş zamanı");
+                                Toast.makeText(getActivity(), "Hatalı bitiş zamanı", Toast.LENGTH_SHORT).show();
                             else
                                 tv_endTime.setText(hourOfDay + ":" + minute);
                         }
@@ -410,35 +408,58 @@ public class EventInformationFragment extends Fragment implements View.OnClickLi
         String endDate = tv_endDate.getText().toString();
         Time startTime = new Time(tv_startTime.getText().toString(),":");
         Time endTime = new Time(tv_endTime.getText().toString(),":");
+        String eventLocation = tv_location.getText().toString();
 
         int notification = spinner_notification.getSelectedItemPosition();
         String notes = edtTxt_notes.getText().toString();
         int reccurance = spinner_recurrence.getSelectedItemPosition();
+        int ringtone = spinner_ringtones.getSelectedItemPosition();
 
-        MyEvent myEvent = new MyEvent(eventName, eventCategory,eventColor,startTime,endTime,startDate,endDate,notification,notes,reccurance);
+        MyEvent myEvent = new MyEvent(eventName, eventCategory,eventColor,startTime,endTime,
+                startDate,endDate,notification,notes,reccurance,ringtone,eventLocation);
         return myEvent;
 
     }
 
     public void setInputs(MyEvent myEvent){
 
-        //TODO edit
-       spinner_notification.setSelection(myEvent.getIndex_notification());
-      spinner_recurrence.setSelection(myEvent.getIndex_recurrence());
-       spinner_category.setSelection(myEvent.getIndex_category());
-      spinner_emailNotification.setSelection(myEvent.getEmail_notification());
+
+        spinner_notification.setSelection(myEvent.getIndex_notification());
+        spinner_recurrence.setSelection(myEvent.getIndex_recurrence());
+        spinner_category.setSelection(myEvent.getIndex_category());
+        spinner_emailNotification.setSelection(myEvent.getEmail_notification());
+        spinner_ringtones.setSelection(myEvent.getIndex_ringtone());
 
         btn_showPalette.setBackgroundColor(myEvent.getColor());
         edtTxt_email.setText(myEvent.getEmail());
-       edtTxt_notes.setText(myEvent.getNotes());
+        edtTxt_notes.setText(myEvent.getNotes());
         edtTxt_eventName.setText(myEvent.getEventName());
         tv_startTime.setText(myEvent.getStartTime().toString());
         tv_startDate.setText(myEvent.getStartDate());;
         tv_endTime.setText(myEvent.getEndTime().toString());;
         tv_endDate.setText(myEvent.getEndDate());
+        tv_location.setText(myEvent.getEventLocation());
         eventColor = myEvent.getColor();
     }
 
+    private void getSharedPreferences(){
 
+        SharedPreferences pref = getActivity().
+                getSharedPreferences("default", getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        //Getting values from shared preferences
+        int indexRecurrence = pref.getInt("recurrence",0);
+        int indexTime = pref.getInt("time",0);
+        int indexSound = pref.getInt("sound",0);
+
+
+        /*Setting values*/
+        spinner_notification.setSelection(indexTime);
+        spinner_recurrence.setSelection(indexRecurrence);
+        spinner_ringtones.setSelection(indexSound);
+        spinner_category.setSelection(0);
+
+    }
 
 }

@@ -25,12 +25,14 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
     <Button
+        style="@style/ButtonStyle123"
         android:id="@+id/MapsActivity_btn_back"
         android:layout_weight="1"
         android:text="İptal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        style="@style/ButtonStyle123"
         android:id="@+id/MapsActivity_btn_choose"
         android:layout_weight="1"
         android:text="Seç"
